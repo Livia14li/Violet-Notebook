@@ -16,16 +16,17 @@
             --blood-ink: #8A0303;      
             --ornament-dot: #6C1708;
             --lush-blue: #065F82;    
-            --crimson-red: #AF4F2C; 
+            --crimson-red: #A64522; /* 锁定：手动修改的橙红色 */
 
-            /* Warmth 核心配色：橘红与粉橘 */
+            /* Warmth 洇染配色 */
             --warmth-bg: #F7EEE9;
-            --orange-red: #AF4F2C; 
-            --pink-orange: #D06741;
+            --orange: #D34A00;      
+            --orange-deep: #E64322; 
+            --peach: #F1948A;
         }
 
         * { scroll-behavior: smooth; cursor: none; }
-        @media (max-width: 768px) { * { cursor: auto !important; } #cursor { display: none; } }
+        @media (max-width: 768px) { * { cursor: auto !important; } #cursor { display: none !important; } }
 
         body {
             background-color: var(--royal-violet);
@@ -36,97 +37,73 @@
             touch-action: manipulation;
         }
 
+        /* --- 最终锁定的“小太阳”光标样式 --- */
         #cursor {
             width: 6px; height: 6px;
-            background: var(--shimmer-bronze);
+            background: var(--shimmer-bronze); /* 中心黄色核心 */
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            box-shadow: 0 0 8px var(--shimmer-bronze);
-            transition: transform 0.1s ease-out;
+            /* 统一的多层深橙色柔和渐变晕染 */
+            box-shadow: 
+                0 0 6px 2.5px var(--crimson-red),      /* 核心加深层 */
+                0 0 20px 5px rgba(166, 69, 34, 0.9),    /* 中间增强层 */
+                0 0 35px rgba(166, 69, 34, 0.4);        /* 边缘扩散层 */
+            transition: transform 0.1s ease-out, box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translate(-50%, -50%); 
         }
 
         .view { position: fixed; inset: 0; display: none; z-index: 10; }
         .view.active { display: block; }
 
-        /* --- 首页 (Archive) --- */
+        /* --- Archive View --- */
         .book-wrapper {
-            perspective: 2500px;
-            display: flex; align-items: center; justify-content: center;
-            min-height: 100vh; position: relative; padding: 20px;
-            z-index: 20;
-            transition: opacity 0.5s ease;
+            perspective: 2500px; display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; position: relative; padding: 20px; z-index: 20; transition: opacity 0.5s ease;
         }
-
-        .mystic-field {
-            position: absolute; top: 50%; left: 50%; width: 0; height: 0; z-index: 5; 
-            pointer-events: none; transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .mystic-symbol {
-            position: absolute; top: 0; left: 0; opacity: 0;
-            animation: riverFlow var(--dur) infinite ease-in-out;
-            white-space: nowrap;
-        }
-
+        .mystic-field { position: absolute; top: 50%; left: 50%; width: 0; height: 0; z-index: 5; pointer-events: none; transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .mystic-symbol { position: absolute; top: 0; left: 0; opacity: 0; animation: riverFlow var(--dur) infinite ease-in-out; white-space: nowrap; }
         @keyframes riverFlow {
             0% { transform: translate(0, 0) scale(0.1); opacity: 0; }
             10% { opacity: 0.85; transform: translate(calc(var(--tx) * 0.12), calc(var(--ty) * 0.12)) scale(0.4); }
             100% { transform: translate(var(--tx), calc(var(--ty) + var(--hookY))) scale(var(--s)); opacity: 0; }
         }
-
         .book { width: 380px; height: 520px; position: relative; transform-style: preserve-3d; transition: transform 1.6s cubic-bezier(0.4, 0, 0.2, 1); }
         @media (min-width: 769px) { .book.open { transform: translateX(190px); } }
-
         .book-page-flip { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: left; transition: transform 1.8s cubic-bezier(0.6, 0, 0.4, 1); z-index: 10; }
         .book.open .book-page-flip { transform: rotateY(-180deg); }
-
         .book-cover-front { position: absolute; inset: 0; background: #2a1028; background-image: url("https://www.transparenttextures.com/patterns/leather.png"); border-radius: 4px 10px 10px 4px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; }
         .dot-ornament { width: 14px; height: 14px; background-color: var(--ornament-dot); border-radius: 50%; box-shadow: inset 0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(255,255,255,0.05); }
-
         .book-inside-right { position: absolute; inset: 0; background: var(--aged-parchment); background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png"); padding: 4rem 2.5rem; color: #1a0b26; border-radius: 0 10px 10px 0; z-index: 5; display: flex; flex-direction: column; overflow: hidden; }
         .book-back-cover { position: absolute; inset: 0; background: var(--aged-parchment); background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png"); padding: 4rem 2.5rem; color: #1a0b26; border-radius: 10px 0 0 10px; transform: rotateY(180deg); backface-visibility: hidden; }
 
-        .scrambled-container {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem; line-height: 1.8;
-            cursor: pointer; word-wrap: break-word; overflow-wrap: anywhere;
-            white-space: pre-wrap; width: 100%;
-        }
+        .scrambled-container { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; line-height: 1.8; cursor: pointer; word-wrap: break-word; overflow-wrap: anywhere; white-space: pre-wrap; width: 100%; }
         .word-node { display: inline-block; }
-        .interactive-word {
-            font-weight: 700; text-decoration: underline !important; text-decoration-thickness: 2px !important;
-            text-underline-offset: 8px; display: inline-block; padding: 0 0.1rem; transition: filter 0.3s ease;
-        }
+        .interactive-word { font-weight: 700; text-decoration: underline !important; text-decoration-thickness: 2px !important; text-underline-offset: 8px; display: inline-block; padding: 0 0.1rem; transition: filter 0.3s ease; }
         .word-data { color: var(--lush-blue); }
         .word-warmth { color: var(--crimson-red); }
         .interactive-word:hover { filter: brightness(1.2); }
-
-        .doodle-trigger {
-            font-family: 'La Belle Aurore', cursive; font-size: 2.1rem; color: var(--blood-ink); opacity: 0.85;
-            margin-top: auto; margin-bottom: 6.5rem; cursor: pointer; transition: 0.3s ease; width: fit-content;
-        }
+        
+        /* 锁定：Desktop 签名与触发词大小 2.5rem */
+        .doodle-trigger { font-family: 'La Belle Aurore', cursive; font-size: 2.5rem; color: var(--blood-ink); opacity: 0.85; margin-top: auto; margin-bottom: 6.5rem; cursor: pointer; transition: 0.3s ease; width: fit-content; }
         .doodle-trigger:hover { opacity: 1; transform: scale(1.05); }
 
-        /* --- 极简爆发 Warmth 转场层 --- */
-        #warmth-transition-container {
-            position: fixed; inset: 0; z-index: 500; pointer-events: none;
-            display: flex; align-items: center; justify-content: center;
+        /* --- Warmth Watercolor Bloom Transition --- */
+        #fx-stage { position: fixed; inset: 0; z-index: 200; pointer-events: none; }
+        .watercolor-bloom {
+            position: absolute; width: 450px; height: 450px;
+            background: radial-gradient(circle at center, #FFFFFF 0%, var(--warmth-bg) 10%, var(--orange) 35%, var(--orange-deep) 60%, var(--peach) 85%, transparent 100%);
+            border-radius: 50%; filter: url(#liquid-filter) blur(75px); opacity: 0; transform: translate(-50%, -50%) scale(0);
         }
-
-        #warmth-pop-circle {
-            width: 100vw; height: 100vh;
-            background: radial-gradient(circle, var(--pink-orange) 0%, var(--orange-red) 100%);
-            clip-path: circle(0% at 50% 50%);
-            transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 1s ease-out;
-            opacity: 0;
+        .watercolor-bloom.active { animation: orangeSoak 3s cubic-bezier(0.7, 0, 0.2, 1) forwards; }
+        @keyframes orangeSoak {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+            12% { opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(80) rotate(8deg); opacity: 1; }
         }
-        #warmth-pop-circle.active { clip-path: circle(150% at 50% 50%); opacity: 1; }
-        #warmth-pop-circle.fading { opacity: 0; transition: opacity 1.2s ease-out; }
-
-        /* --- Case Study Placeholder --- */
-        #view-warmth { background-color: var(--warmth-bg); z-index: 50; }
+        #final-wash { position: fixed; inset: 0; background: var(--warmth-bg); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        #final-wash.active { opacity: 1; }
 
         /* --- Film View (Data) --- */
         #view-data { background: var(--cinema-void); overflow: hidden; }
@@ -135,12 +112,12 @@
         .film-container { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100vw; z-index: 10; }
         #void-state { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; z-index: 100; }
         .ornate-film-frame { position: absolute; inset: 6vw; pointer-events: none; opacity: 0; transition: opacity 1.5s ease; filter: url(#jitter); display: flex; align-items: center; justify-content: center; }
-        @media (min-width: 768px){ .ornate-film-frame { inset: 8vw; transform: scaleX(0.9); } }
+        @media (min-width: 768px){ .ornate-film-frame { inset: 12.5vh 8vw; transform: scaleX(0.9); } } /* 保持 75vh 边框逻辑 */
         .ornate-film-frame.visible { opacity: 1; }
         .frame-inner-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
         .silent-text-content { position: relative; max-width: 800px; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--cinema-white); opacity: 0; transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); z-index: 20; height: auto; }
         .silent-text-content.active { opacity: 1; }
-        .film-dialogue { font-size: 2.5rem; line-height: 1.35; font-style: italic; display: block; }
+        .film-dialogue { font-size: 2.5rem; line-height: 1.6; font-style: italic; display: block; }
         .drop-cap { font-size: 5.5rem; line-height: 0.6; font-weight: 600; font-style: normal; display: inline-block; }
         .grungy-btn { background: transparent; border: 1.5px solid var(--cinema-white); color: var(--cinema-white); padding: 1rem 2.5rem; font-family: 'Space Mono', monospace; font-size: 0.85rem; letter-spacing: 0.5em; text-transform: uppercase; cursor: pointer; border-radius: 100px; white-space: nowrap; filter: url(#jitter); }
         .grungy-btn:hover { background: var(--cinema-white); color: var(--cinema-void); }
@@ -159,8 +136,11 @@
             .book { width: 280px; height: 400px; }
             .book.open { transform: translateY(0); }
             .book-inside-right { padding: 3rem 1.5rem; }
-            .scrambled-container { font-size: 1.25rem; line-height: 1.9; } 
-            .doodle-trigger { font-size: 1.5rem; margin-top: 2rem; margin-bottom: 2rem; }
+            .scrambled-container { font-size: 1.4rem; line-height: 1.9; } 
+            .doodle-trigger { font-size: 1.85rem; margin-top: 2rem; margin-bottom: 2rem; }
+            .ornate-film-frame { inset: 12.5vh 6vw; } /* 锁定：75vh */
+            .film-dialogue { font-size: 2rem; }
+            .drop-cap { font-size: 3rem; }
             .silent-text-content { width: 75%; } 
             #investigate-trigger.visible { margin-top: 2rem; }
         }
@@ -174,7 +154,11 @@
     </style>
 </head>
 <body id="body-main">
-    <svg style="position: absolute; width: 0; height: 0;">
+    <svg width="0" height="0" style="position: absolute;">
+        <filter id="liquid-filter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="40" />
+            <feDisplacementMap in="SourceGraphic" scale="120" />
+        </filter>
         <filter id="jitter">
             <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" result="noise" />
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" />
@@ -186,10 +170,11 @@
     <div id="transition-overlay"><canvas id="data-canvas"></canvas></div>
     <div class="paper-grain"></div>
 
-    <!-- 极简爆破转场层 -->
-    <div id="warmth-transition-container">
-        <div id="warmth-pop-circle"></div>
+    <!-- Warmth Bloom Stage -->
+    <div id="fx-stage">
+        <div id="fx-bloom" class="watercolor-bloom"></div>
     </div>
+    <div id="final-wash"></div>
 
     <!-- VIEW: Archive -->
     <section class="view active" id="view-archive">
@@ -202,12 +187,13 @@
                         <div class="hidden md:block">
                             <p class="mono opacity-40">ENTRY.01</p>
                             <div style="font-style: italic;" class="text-2xl mt-12">If found, please return to:</div>
-                            <div class="hand text-5xl mt-6 opacity-85" style="color: #1a0b26;">Livia Li</div>
+                            <!-- 锁定：Desktop 签名 2.5rem -->
+                            <div class="hand text-[2.5rem] mt-6 opacity-85" style="color: #1a0b26;">Livia Li</div>
                         </div>
                     </div>
                 </div>
                 <div class="book-inside-right">
-                    <p class="mono mb-11 opacity-40">FRAGMENT.2026</p>
+                    <p class="mono mb-11 opacity-40">SPRING.2026</p>
                     <div class="scrambled-container" id="scrambled-game"></div>
                     <div class="doodle-trigger" id="doodle-resolve">Piercing?</div>
                 </div>
@@ -215,7 +201,7 @@
         </div>
     </section>
 
-    <!-- VIEW: Warmth Placeholder (奶油色背景页) -->
+    <!-- VIEW: Warmth Placeholder -->
     <section class="view" id="view-warmth"></section>
 
     <!-- VIEW: Data (Film Strip) -->
@@ -255,10 +241,21 @@
         const dataCanvas = document.getElementById('data-canvas');
         const strip = document.getElementById('film-strip');
         
+        const bloom = document.getElementById('fx-bloom');
+        const wash = document.getElementById('final-wash');
+        
         const targetSentence = "Piercing through data to infuse systematic warmth";
         let isResolved = false;
         let scrambleInterval = null;
         const isMobile = window.innerWidth <= 768;
+
+        /* --- 锁定版光标跟随 (全局统一“太阳”效果) --- */
+        if(!isMobile) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+        }
 
         const symbols = ['✿', '❀', '❁', '✾', '❊', '❃', '✻', '❋', '★', '♩', '♪', '♫', '♬'];
         for(let i=0; i<(isMobile ? 120 : 250); i++) {
@@ -268,8 +265,7 @@
             const isTR = Math.random() > 0.5;
             let tx = isTR ? 800 + Math.random() * 1200 : -800 - Math.random() * 1200;
             let ty = isTR ? -800 - Math.random() * 1200 : 800 + Math.random() * 1200;
-            s.style.setProperty('--tx', `${tx}px`);
-            s.style.setProperty('--ty', `${ty}px`);
+            s.style.setProperty('--tx', `${tx}px`); s.style.setProperty('--ty', `${ty}px`);
             s.style.setProperty('--hookY', (ty < 0 ? 300 : -300) + 'px');
             if (isMobile) s.style.setProperty('--s', 1.8 + Math.random() * 3); 
             else s.style.setProperty('--s', isTR ? 1.3 + Math.random() * 2.7 : 2.5 + Math.random() * 3.5);
@@ -316,8 +312,7 @@
         }
 
         async function triggerRevealSequence() {
-            isResolved = true;
-            clearInterval(scrambleInterval);
+            isResolved = true; clearInterval(scrambleInterval);
             const words = targetSentence.split(' ');
             container.innerHTML = '';
             words.forEach((word, wordIdx) => {
@@ -326,12 +321,11 @@
                 const lower = word.toLowerCase();
                 if (lower.includes('data') || lower.includes('warmth')) {
                     wordNode.classList.add('interactive-word', lower.includes('data') ? 'word-data' : 'word-warmth');
-                    wordNode.onclick = (e) => { e.stopPropagation(); lower.includes('data') ? runDataTransition() : runWarmthTransition(); };
+                    wordNode.onclick = (e) => { e.stopPropagation(); lower.includes('data') ? runDataTransition() : runWarmthTransition(e); };
                 }
                 word.split('').forEach(c => {
                     const s = document.createElement('span'); s.textContent = c; s.style.opacity = '0'; s.style.transition = 'opacity 0.4s';
-                    wordNode.appendChild(s);
-                    setTimeout(() => s.style.opacity = '1', 500 + wordIdx * 100);
+                    wordNode.appendChild(s); setTimeout(() => s.style.opacity = '1', 500 + wordIdx * 100);
                 });
                 container.appendChild(wordNode);
                 if (wordIdx < words.length - 1) container.appendChild(document.createTextNode('\u00A0'));
@@ -348,26 +342,17 @@
             dataCanvas.style.display = 'none';
         }
 
-        /* --- 极简爆发 Warmth 转场核心逻辑 --- */
-        function runWarmthTransition() {
-            const popCircle = document.getElementById('warmth-pop-circle');
-            const bookWrapper = document.getElementById('book-archive-wrapper');
-
-            // 1. 爆发开始：暖色圆环瞬间涨满屏幕 (T=0)
-            popCircle.classList.add('active');
-            bookWrapper.style.opacity = '0';
-
-            // 2. 在色彩涨满屏幕的瞬间静默切换视图 (T=1000ms)
-		setTimeout(() => {
-       		 // 🚀 核心：跳转到 warmth
-       		 window.location.href = 'warmth.html'; 
- 		   }, 800);
-
-            // 4. 清理状态 (T=2000ms)
-            setTimeout(() => {
-                popCircle.classList.remove('active', 'fading');
-            }, 2000);
+        function runWarmthTransition(e) {
+            const x = e.clientX || window.innerWidth / 2;
+            const y = e.clientY || window.innerHeight / 2;
+            document.getElementById('book-archive-wrapper').style.opacity = '0';
+            document.body.style.backgroundColor = 'var(--warmth-bg)';
+            bloom.style.left = `${x}px`; bloom.style.top = `${y}px`;
+            bloom.classList.add('active');
+            setTimeout(() => { wash.classList.add('active'); }, 2100);
+            setTimeout(() => { window.location.href = 'warmth.html'; }, 2500);
         }
+
         function startFilmFlow() {
             document.getElementById('void-state').style.display = 'none';
             const frame = document.getElementById('intertitle-frame');
@@ -383,9 +368,9 @@
                     setTimeout(() => {
                         display.innerHTML = '<span class="film-dialogue"><span class="drop-cap">T</span>hat name... never speak it.&nbsp;Eligibility.</span>';
                         textArea.classList.add('active');
-                        setTimeout(() => trigger.classList.add('visible'), 2000);
-                    }, 1200);
-                }, 2700); 
+                        setTimeout(() => trigger.classList.add('visible'), 2000); 
+                    }, 800); 
+                }, 2000); 
             }, 800);
         }
 
@@ -393,9 +378,7 @@
             document.getElementById('body-main').classList.add('spinning');
             strip.style.transition = 'transform 3s cubic-bezier(0.85, 0, 0.15, 1)'; 
             strip.style.transform = 'translateY(-400vh)';
-            setTimeout(() => {
-                window.location.href = 'data.html'; 
-            }, 3000); 
+            setTimeout(() => { window.location.href = 'data.html'; }, 3000); 
         }
 
         function runDataTransition() {
@@ -413,7 +396,7 @@
                 });
             }
             const startTime = performance.now();
-            const duration = 3500;
+            const duration = 3000;
             function draw() {
                 const now = performance.now();
                 const progress = now - startTime;
@@ -441,74 +424,43 @@
             draw();
         }
 
-        if(!isMobile) document.addEventListener('mousemove', (e) => {
-            cursor.style.transform = `translate(${e.clientX-3}px, ${e.clientY - 3}px)`;
-        });
-
         book.onclick = (e) => { 
             if(!e.target.closest('.interactive-word') && e.target.id!=='doodle-resolve') { 
                 book.classList.toggle('open'); 
                 mysticField.style.opacity = book.classList.contains('open') ? '0' : '1'; 
             } 
         };
-window.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('state') === 'resolved') {
-        const pageFlip = document.querySelector('.book-page-flip');
-        
-        // 1. 设定翻书节奏 (1.7秒)
-        const swiftEase = 'transform 1.9s cubic-bezier(0.3, 0, 0.2, 1)';
-        grimoire.style.transition = swiftEase;
-        if(pageFlip) pageFlip.style.transition = swiftEase;
-        mysticField.style.transition = 'opacity 1.5s ease-out';
 
-        // 2. 重点：瞬间构建“已揭秘”的 DOM 结构，跳过所有动画逻辑
-        isResolved = true;
-        clearInterval(scrambleInterval);
-        const words = targetSentence.split(' ');
-        container.innerHTML = ''; // 清空所有乱码插槽
-        
-        words.forEach((word, wordIdx) => {
-            const wordNode = document.createElement('span');
-            wordNode.className = 'word-node';
-            const lower = word.toLowerCase();
-            
-            // 重新赋予点击跳转逻辑
-            if (lower.includes('data') || lower.includes('warmth')) {
-                wordNode.classList.add('interactive-word', lower.includes('data') ? 'word-data' : 'word-warmth');
-                wordNode.onclick = (e) => { 
-                    e.stopPropagation(); 
-                    lower.includes('data') ? runDataTransition() : runWarmthTransition(); 
-                };
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('state') === 'resolved') {
+                const pageFlip = document.querySelector('.book-page-flip');
+                const swiftEase = 'transform 1.9s cubic-bezier(0.3, 0, 0.2, 1)';
+                grimoire.style.transition = swiftEase;
+                if(pageFlip) pageFlip.style.transition = swiftEase;
+                mysticField.style.transition = 'opacity 1.5s ease-out';
+                isResolved = true; clearInterval(scrambleInterval);
+                const words = targetSentence.split(' ');
+                container.innerHTML = ''; 
+                words.forEach((word, wordIdx) => {
+                    const wordNode = document.createElement('span'); wordNode.className = 'word-node';
+                    const lower = word.toLowerCase();
+                    if (lower.includes('data') || lower.includes('warmth')) {
+                        wordNode.classList.add('interactive-word', lower.includes('data') ? 'word-data' : 'word-warmth');
+                        wordNode.onclick = (e) => { e.stopPropagation(); lower.includes('data') ? runDataTransition() : runWarmthTransition(e); };
+                    }
+                    word.split('').forEach(c => {
+                        const s = document.createElement('span'); s.textContent = c; s.style.opacity = '1'; wordNode.appendChild(s);
+                    });
+                    container.appendChild(wordNode);
+                    if (wordIdx < words.length - 1) container.appendChild(document.createTextNode('\u00A0'));
+                });
+                doodleResolve.style.display = 'none'; 
+                setTimeout(() => {
+                    grimoire.classList.add('open'); mysticField.style.opacity = '0';
+                }, 300); 
             }
-            
-            // 直接填入文字，opacity 直接设为 1
-            word.split('').forEach(c => {
-                const s = document.createElement('span'); 
-                s.textContent = c; 
-                s.style.opacity = '1'; 
-                wordNode.appendChild(s);
-            });
-            
-            container.appendChild(wordNode);
-            if (wordIdx < words.length - 1) container.appendChild(document.createTextNode('\u00A0'));
         });
-        
-        doodleResolve.style.display = 'none'; // 隐藏那个红色手写词
-
-        // 3. 落地 300ms 后优雅翻开
-        setTimeout(() => {
-            grimoire.classList.add('open');
-            mysticField.style.opacity = '0';
-
-            // 恢复物理参数，不影响后续手动操作
-            setTimeout(() => {
-                grimoire.style.transition = 'transform 1.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                if(pageFlip) pageFlip.style.transition = 'transform 1.8s cubic-bezier(0.6, 0, 0.4, 1)';
-            }, 1800);
-        }, 300); 
-    }
-});
     </script>
 </body>
 </html>
