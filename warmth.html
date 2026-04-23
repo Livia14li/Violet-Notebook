@@ -47,6 +47,7 @@
 </head>
 <body>
 
+    <!-- SVG Filters for Grungy Aesthetics -->
     <svg style="position: absolute; width: 0; height: 0;">
         <filter id="jitter-case2">
             <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" result="noise" />
@@ -65,6 +66,7 @@
           const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
           const containerRef = useRef(null);
 
+          // --- 核心设计参数 (LOCKED & PROTECTED) ---
           const designSystem = {
             layout: {
               maxWidth: "1056px",
@@ -137,7 +139,7 @@
             window.addEventListener("scroll", handleScroll);
             
             const link = document.createElement("link");
-            link.href = "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Hanken+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Nanum+Brush+Script&display=swap";
+            link.href = "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Hanken+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Mono&family=Nanum+Brush+Script&display=swap";
             link.rel = "stylesheet";
             document.head.appendChild(link);
             
@@ -147,6 +149,7 @@
             };
           }, []);
 
+          // --- 物理光影逻辑 ---
           const heroOpacity = scrollProgress < 0.07 ? Math.pow(1 - scrollProgress / 0.07, 3.0) : 0;
           const isRevived = scrollProgress > 0.18; 
           const growthT = isRevived ? Math.min((scrollProgress - 0.18) / 0.65, 1) : 0;
@@ -159,6 +162,7 @@
           const darknessT = scrollProgress > 0.85 ? Math.min((scrollProgress - 0.85) / 0.12, 1) : 0;
           const dynamicTextColor = darknessT > 0.3 ? "#1A1A1A" : designSystem.colors.text;
 
+          // --- UI Helpers ---
           const lh = 4.2; const labelSize = "14px"; 
           const notesSize = "clamp(18px, 2.5vw, 24px)"; 
 
@@ -250,25 +254,27 @@
                 </div>
               </section>
 
-              {/* 02. THE ASSUMPTION */}
+              {/* 02. THE INITIAL VISION */}
               <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10">
                 <div className="mx-auto" style={{ maxWidth: designSystem.layout.maxWidth }}>
-                  <div className="flex flex-col items-center">
-                     <div className="w-full text-center">
-                        <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>01 / THE INITIAL ASSUMPTION</div>
+                  <div className="flex flex-col items-start">
+                     <div className="w-full text-center mb-16">
+                        <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>01 / THE INITIAL VISION</div>
                      </div>
-                     <div className="flex flex-col items-center text-center mt-16">
-                       <div className="max-w-4xl mb-12">
-                          <p style={{ ...getEbStyle(designSystem.layout.narrativeSize), lineHeight: '1.4' }}>
-                            A joint account belongs to two people, equally. My Product Owner approached to me with this simple vision:
-                          </p>
+                     
+                     <div className="w-full text-left">
+                       <div className="mb-10">
+                          <h2 style={{ ...getEbStyle(designSystem.layout.titleSize), lineHeight: '1.2' }}>Modernising the joint application journey</h2>
                        </div>
-                       <div className="mb-20">
-                          <h2 style={{ ...getEbStyle(designSystem.layout.narrativeSize), lineHeight: '1.4' }}>Equal liability = equal process</h2>
+                       
+                       <div className="w-full">
+                          <p style={bodyStyle}>
+                            Legacy joint account applications were restricted to web or branch, demanding co-presence and constant coordination. To scale this into Santander’s latest mobile ecosystem, my PO had a vision that enables flexibility and reflects true financial parity. It sounds simple: <Bold>equal liability = equal process.</Bold>
+                          </p>
                        </div>
                      </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-0 relative z-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-0 relative z-10" style={{ marginTop: '12vh' }}>
                     <div className="lg:border-r-0"><NotebookPaper id={1} /></div>
                     <div><NotebookPaper id={2} /></div>
                   </div>
@@ -280,7 +286,14 @@
                 <div className="mx-auto text-left" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="flex flex-col">
                     <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>02 / Assumption challenged</div>
+                    
                     <h3 style={{ marginTop: designSystem.layout.labelToTitle }} className="font-['Nanum_Brush_Script'] text-[clamp(4.5rem,9vw,14vh)] leading-[1.2] text-[#2D2A26]"><span>Not just operational</span><span className="relative -top-[0.15em]">,</span><span> but</span> <br/> <span style={{ color: designSystem.colors.accent }}>relational</span></h3>
+
+                    <div className="mt-12 max-w-4xl">
+                       <p style={bodyStyle}>
+                         To test the 'Separate but Equal' vision, we stepped into the lives of <Bold>6 couples</Bold> for concept testing and ran a <Bold>300-person survey</Bold> to validate their motivation and habits.
+                       </p>
+                    </div>
                   </div>
                   <div className="relative flex flex-col items-start lg:block gap-12 lg:gap-8 lg:min-h-[950px]" style={{ marginTop: designSystem.layout.titleToContent }}>
                     {discoveryData.map((item, i) => {
@@ -342,7 +355,7 @@
                         <p style={bodyStyle}>Research indicates a <Bold>leading & following dynamic</Bold> and a sitting together preference.</p>
                       </div>
                       <div className="md:absolute md:right-0 md:bottom-[60%] md:w-[42%] text-left space-y-3">
-                        <h4 className={`font-['EB_Garamond'] italic font-normal text-[#2D2A26] leading-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>Tech constraints</h4>
+                        <h4 className={`font-['EB_Garamond'] italic font-normal text-[#2D2A26] Bird leading-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>Tech constraints</h4>
                         <p style={bodyStyle}><Bold>Individual device</Bold> authentication mandated. Risk profiling requires data from both for an overdraft.</p>
                       </div>
                     </div>
@@ -372,7 +385,7 @@
                 </div>
               </section>
 
-              {/* 05. SECOND VALIDATION - FIXED MOBILE STACKING AND DESKTOP ALIGNMENT */}
+              {/* 05. SECOND VALIDATION */}
               <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10">
                 <div className="mx-auto flex flex-col" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="flex flex-col space-y-4 text-left">
@@ -385,24 +398,20 @@
                     </p>
                   </div>
                   
-                  {/* Grid approach using order classes to maintain mobile flow and desktop visual alignment */}
                   <div className="grid grid-cols-1 md:grid-cols-2 mt-[15vh] gap-x-16 lg:gap-x-24">
                     
-                    {/* Item 1: Qualitative Image */}
                     <div className="order-1 md:order-1">
                       <div className="w-full md:max-w-[320px] bg-white border border-black/5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.03)] overflow-hidden h-fit flex items-center">
                         <img src={assets.validation} alt="Confusion insight" className="w-full h-auto block" />
                       </div>
                     </div>
 
-                    {/* Item 2: Qualitative Text (Mobile: Order 2, Desktop: Order 3) */}
                     <div className="order-2 md:order-3 mt-5 md:mt-12 space-y-4 text-left w-full md:max-w-[320px]">
                         <div className="font-['JetBrains_Mono'] tracking-[0.2em] font-medium uppercase text-[#737373]" style={{ fontSize: '14px' }}>Qualitative</div>
                         <h4 className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] leading-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>"Why am I asked? I am just confirming."</h4>
                         <p style={bodyStyle}>For applicant 2, although overdraft is mentioned right after they start, they were still surprised and confused when being asked later.</p>
                     </div>
 
-                    {/* Item 3: Quantitative Card (Mobile: Order 3, Desktop: Order 2) */}
                     <div className="order-3 md:order-2 mt-20 md:mt-0">
                       <div className="w-full md:max-w-[320px] bg-white border border-black/5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.03)] p-8 md:p-10 flex flex-col justify-between h-full min-h-[300px]">
                         <div className="space-y-1 pb-4 border-b border-black/[0.05]">
@@ -423,7 +432,6 @@
                       </div>
                     </div>
 
-                    {/* Item 4: Quantitative Text (Mobile: Order 4, Desktop: Order 4) */}
                     <div className="order-4 md:order-4 mt-5 md:mt-12 space-y-6 text-left w-full md:max-w-[320px]">
                         <div className="font-['JetBrains_Mono'] tracking-[0.2em] uppercase font-medium text-[#737373]" style={{ fontSize: '14px' }}>Quantitative</div>
                         <h4 className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] leading-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>Surprisingly, the independent model benefits</h4>
@@ -481,19 +489,19 @@
                 </div>
               </section>
 
-              {/* 07 / THE LAUNCH */}
+              {/* 07 / THE LAUNCH - [UPDATED WITH LATEST TEXT] */}
               <section className="h-screen flex flex-col items-center justify-center px-6 md:px-12 lg:px-0 text-center relative z-20 overflow-hidden">
                 <div className="mx-auto space-y-8 md:space-y-10 w-full flex flex-col items-center" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>07 / THE LAUNCH</div>
                   <h2 style={getEbStyle("clamp(4.5rem, 12vw, 15vh)")}>Balanced roles</h2>
-                  <div className="max-w-xl mx-auto">
+                  <div className="max-w-2xl mx-auto">
                     <p style={bodyStyle}>
-                      Launching later this year, the MVP will serve as the first scale-test of our philosophy: honouring the natural rhythm of partnership.
+                      Honouring the natural rhythm of partnership, the mobile joint account application journey is set to drive <Bold>a 15% uplift</Bold> in all channel applications (<Bold>+14.4k annually</Bold>).
                     </p>
                   </div>
                   
                   <div className="pt-8 w-full flex justify-center">
-                    <a href="index.html?state=resolved" class="grungy-back-btn">BACK TO MYSTERY</a>
+                    <a href="index.html?state=resolved" className="grungy-back-btn">BACK TO MYSTERY</a>
                   </div>
                 </div>
               </section>
