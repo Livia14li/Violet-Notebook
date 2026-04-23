@@ -66,7 +66,7 @@
           const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
           const containerRef = useRef(null);
 
-          // --- 核心设计参数 (LOCKED & PROTECTED) ---
+          // --- 核心设计参数 ---
           const designSystem = {
             layout: {
               maxWidth: "1056px",
@@ -82,11 +82,12 @@
               titleTracking: "-0.05em", 
               bodySize: "20px",
               bodyWeight: 300,
-              bodyTracking: "-0.027em" 
+              bodyTracking: "-0.027em"
             },
             colors: {
               bg: "#F7EEE9",
               text: "#3E3832", 
+              heading: "#2D2A26",
               accent: "#D06741",      
               darkAccent: "#AF4F2C", 
               sub: "#737373", 
@@ -149,7 +150,6 @@
             };
           }, []);
 
-          // --- 物理光影逻辑 ---
           const heroOpacity = scrollProgress < 0.07 ? Math.pow(1 - scrollProgress / 0.07, 3.0) : 0;
           const isRevived = scrollProgress > 0.18; 
           const growthT = isRevived ? Math.min((scrollProgress - 0.18) / 0.65, 1) : 0;
@@ -162,7 +162,6 @@
           const darknessT = scrollProgress > 0.85 ? Math.min((scrollProgress - 0.85) / 0.12, 1) : 0;
           const dynamicTextColor = darknessT > 0.3 ? "#1A1A1A" : designSystem.colors.text;
 
-          // --- UI Helpers ---
           const lh = 4.2; const labelSize = "14px"; 
           const notesSize = "clamp(18px, 2.5vw, 24px)"; 
 
@@ -258,7 +257,7 @@
               <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10">
                 <div className="mx-auto" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="flex flex-col items-start">
-                     <div className="w-full text-center mb-16">
+                     <div className="w-full text-left mb-16">
                         <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>01 / THE INITIAL VISION</div>
                      </div>
                      
@@ -267,7 +266,7 @@
                           <h2 style={{ ...getEbStyle(designSystem.layout.titleSize), lineHeight: '1.2' }}>Modernising the joint application journey</h2>
                        </div>
                        
-                       <div className="w-full">
+                       <div className="w-full text-left">
                           <p style={bodyStyle}>
                             Legacy joint account applications were restricted to web or branch, demanding co-presence and constant coordination. To scale this into Santander’s latest mobile ecosystem, my PO had a vision that enables flexibility and reflects true financial parity. It sounds simple: <Bold>equal liability = equal process.</Bold>
                           </p>
@@ -284,14 +283,14 @@
               {/* 03. DISCOVERY */}
               <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10">
                 <div className="mx-auto text-left" style={{ maxWidth: designSystem.layout.maxWidth }}>
-                  <div className="flex flex-col">
+                  <div className="flex flex-col items-start">
                     <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>02 / Assumption challenged</div>
                     
-                    <h3 style={{ marginTop: designSystem.layout.labelToTitle }} className="font-['Nanum_Brush_Script'] text-[clamp(4.5rem,9vw,14vh)] leading-[1.2] text-[#2D2A26]"><span>Not just operational</span><span className="relative -top-[0.15em]">,</span><span> but</span> <br/> <span style={{ color: designSystem.colors.accent }}>relational</span></h3>
+                    <h3 style={{ marginTop: designSystem.layout.labelToTitle }} className="font-['Nanum_Brush_Script'] text-[clamp(4.5rem,9vw,14vh)] leading-[1.2] text-[#2D2A26] text-left"><span>Not just operational</span><span className="relative -top-[0.15em]">,</span><span> but</span> <br/> <span style={{ color: designSystem.colors.accent }}>relational</span></h3>
 
-                    <div className="mt-12 max-w-4xl">
+                    <div className="mt-12 max-w-4xl text-left">
                        <p style={bodyStyle}>
-                         To test the 'Separate but Equal' vision, we stepped into the lives of <Bold>6 couples</Bold> for concept testing and ran a <Bold>300-person survey</Bold> to validate their motivation and habits.
+                         To test the "separate but equal" vision, we stepped into the lives of <Bold>6 couples</Bold> for concept testing and ran a <Bold>300-person survey</Bold> to validate their motivation and habits.
                        </p>
                     </div>
                   </div>
@@ -324,10 +323,10 @@
                 <div className="mx-auto" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>03 / Strategic intervention</div>
                   <div style={{ marginTop: designSystem.layout.labelToTitle }}>
-                    <h3 style={getEbStyle(designSystem.layout.titleSize)}>Advocating for the new</h3>
+                    <h3 style={getEbStyle(designSystem.layout.titleSize)} className="text-left">Advocating for the new</h3>
                     <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center" style={{ marginTop: designSystem.layout.titleToContent }}>
-                        <div style={{ ...getEbStyle("clamp(8rem, 15vw, 28vh)"), color: designSystem.colors.accent, letterSpacing: '-0.08em' }}>30%</div>
-                        <div style={bodyStyle}>
+                        <div style={{ ...getEbStyle("clamp(8rem, 15vw, 28vh)"), color: designSystem.colors.accent, letterSpacing: '-0.08em' }} className="text-left">30%</div>
+                        <div style={bodyStyle} className="text-left">
                             <p>30% survey participants choose new providers for a <Bold>fresh start</Bold> or to keep things separate. This insight led to an expansion to <Bold>acquisition</Bold> in MVP 2.</p>
                         </div>
                     </div>
@@ -336,11 +335,11 @@
               </section>
 
               {/* 05. FIRST DRAFT */}
-              <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10 text-left md:text-center">
-                <div className="mx-auto flex flex-col items-start md:items-center" style={{ maxWidth: designSystem.layout.maxWidth }}>
-                  <div className="flex flex-col items-start md:items-center">
+              <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10 text-left">
+                <div className="mx-auto flex flex-col items-start" style={{ maxWidth: designSystem.layout.maxWidth }}>
+                  <div className="flex flex-col items-start">
                     <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>04 / First draft</div>
-                    <h3 style={{ ...getEbStyle(designSystem.layout.titleSize), marginTop: designSystem.layout.labelToTitle }}>Role vs rule</h3>
+                    <h3 style={{ ...getEbStyle(designSystem.layout.titleSize), marginTop: designSystem.layout.labelToTitle }} className="text-left">Role vs rule</h3>
                   </div>
                   <div className="w-full flex flex-col md:block relative py-12 md:py-20" style={{ marginTop: designSystem.layout.titleToContent }}>
                     <div className="hidden md:block absolute top-1/2 w-full h-px bg-black/10"></div>
@@ -361,7 +360,7 @@
                     </div>
                   </div>
                   <div className="w-full mt-12 flex flex-col items-start">
-                    <div className="w-full text-left md:text-center mb-16 md:mb-20">
+                    <div className="w-full text-left mb-16 md:mb-20">
                       <div className="font-['Nanum_Brush_Script'] text-[clamp(3.5rem,10vw,8rem)] text-[#D06741] -rotate-1 leading-[1.2]">Will this work?</div>
                     </div>
                     <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-y-20 md:gap-y-0 md:gap-x-12 lg:gap-x-16">
@@ -386,13 +385,13 @@
               </section>
 
               {/* 05. SECOND VALIDATION */}
-              <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10">
+              <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10 text-left">
                 <div className="mx-auto flex flex-col" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="flex flex-col space-y-4 text-left">
                     <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>05 / Second validation</div>
-                    <h3 style={{ ...getEbStyle(designSystem.layout.titleSize), marginTop: designSystem.layout.labelToTitle }}>Caught off guard</h3>
+                    <h3 style={{ ...getEbStyle(designSystem.layout.titleSize), marginTop: designSystem.layout.labelToTitle }} className="text-left">Caught off guard</h3>
                   </div>
-                  <div className="max-w-2xl text-left space-y-8" style={{ marginTop: designSystem.layout.titleToContent }}>
+                  <div className="max-w-5xl text-left space-y-8" style={{ marginTop: designSystem.layout.titleToContent }}>
                     <p style={bodyStyle}>
                       I flagged the risk, yet validation was not initially viable due to budget. I pushed to <Bold>negotiate lighter alternatives</Bold> like shorter interviews, while also insisting on a quantitative survey to <Bold>test at scale</Bold>.
                     </p>
@@ -489,18 +488,18 @@
                 </div>
               </section>
 
-              {/* 07 / THE LAUNCH - [UPDATED WITH LATEST TEXT] */}
-              <section className="h-screen flex flex-col items-center justify-center px-6 md:px-12 lg:px-0 text-center relative z-20 overflow-hidden">
-                <div className="mx-auto space-y-8 md:space-y-10 w-full flex flex-col items-center" style={{ maxWidth: designSystem.layout.maxWidth }}>
-                  <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>07 / THE LAUNCH</div>
-                  <h2 style={getEbStyle("clamp(4.5rem, 12vw, 15vh)")}>Balanced roles</h2>
-                  <div className="max-w-2xl mx-auto">
+              {/* 07 / THE LAUNCH */}
+              <section className="h-screen flex flex-col items-start md:items-center justify-center px-6 md:px-12 lg:px-0 text-left md:text-center relative z-20 overflow-hidden">
+                <div className="mx-auto space-y-8 md:space-y-10 w-full flex flex-col items-start md:items-center" style={{ maxWidth: designSystem.layout.maxWidth }}>
+                  <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741] text-left md:text-center w-full" style={{ fontSize: '14px' }}>07 / THE LAUNCH</div>
+                  <h2 style={getEbStyle("clamp(4.5rem, 12vw, 15vh)")} className="text-left md:text-center w-full">Balanced roles</h2>
+                  <div className="max-w-2xl text-left md:text-center">
                     <p style={bodyStyle}>
                       Honouring the natural rhythm of partnership, the mobile joint account application journey is set to drive <Bold>a 15% uplift</Bold> in all channel applications (<Bold>+14.4k annually</Bold>).
                     </p>
                   </div>
                   
-                  <div className="pt-8 w-full flex justify-center">
+                  <div className="pt-8 w-full flex justify-start md:justify-center">
                     <a href="index.html?state=resolved" className="grungy-back-btn">BACK TO MYSTERY</a>
                   </div>
                 </div>
