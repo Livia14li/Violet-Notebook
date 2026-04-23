@@ -11,37 +11,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
-/* 1. 背景保持深邃的黑 */
-body {
-    background-color: #000 !important;
-    margin: 0;
-}
+        body {
+            background-color: #000 !important;
+            margin: 0;
+        }
 
-/* 2. 核心：从上方坠落并微弱回弹 */
-#root {
-    opacity: 0;
-    /* 初始位置：在正上方 30px 处 */
-    transform: translateY(-30px); 
-    
-    /* 🎬 动作：0.9s 的持续时间 */
-    /* 贝塞尔曲线：用 cubic-bezier(0.18, 1.15, 0.54, 1) 来实现那个微妙的“回弹”感 */
-    animation: slideDownBounce 0.9s cubic-bezier(0.18, 1.15, 0.54, 1) forwards;
-    
-    /* 🎬 延迟：0.2s，让它刚好接住首页向上抽离的瞬间 */
-    animation-delay: 0.2s; 
-}
+        #root {
+            opacity: 0;
+            transform: translateY(-30px); 
+            animation: slideDownBounce 0.9s cubic-bezier(0.18, 1.15, 0.54, 1) forwards;
+            animation-delay: 0.2s; 
+        }
 
-@keyframes slideDownBounce {
-    0% {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-        /* 核心视觉锁定 */
+        @keyframes slideDownBounce {
+            0% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         body { 
             background-color: #050505; 
             margin: 0;
@@ -49,7 +35,6 @@ body {
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* 底部按钮区域 */
         .footer-nav {
             display: flex;
             justify-content: center;
@@ -296,12 +281,12 @@ body {
                       I insist we handle the case with <span className="text-brand-red tracking-[-0.05em] italic">caution.</span>
                     </h2>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 pt-16 text-left max-w-3xl mx-auto">
-                    <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-20 pt-16 text-left max-w-4xl mx-auto">
+                    <div className="space-y-4 max-w-[380px]">
                        <h3 className="text-subtitle text-light-primary">Chance</h3>
                        <p className="text-body-standard text-dark-body">Eligibility is flagged by my PO as the biggest drop-off point the journey.</p>
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-4 max-w-[380px]">
                        <h3 className="text-subtitle text-light-primary">Or trap?</h3>
                        <p className="text-body-standard text-dark-body">However, drop off is partly intended. Fixing surface will merely delay the failure.</p>
                     </div>
@@ -312,7 +297,7 @@ body {
                 <section className="flex flex-col space-y-12">
                   <div className="max-w-5xl mx-auto text-center px-4">
                     <h2 className="text-section-title text-light-primary ink-bleed-heavy italic">
-                      Is the drop off natuaral? <br className="hidden md:block" /> I dug into Adobe analytics.
+                      Is the drop off natural? <br className="hidden md:block" /> I dug into Adobe analytics.
                     </h2>
                     <h2 className="text-outliner text-light-primary ink-bleed-heavy pb-12 mt-12 md:mt-48">Spellbound.</h2>
                   </div>
@@ -376,7 +361,7 @@ body {
                               <div className="mt-12 text-label text-brand-red group-hover:scale-110 transition-transform duration-300">CLICK TO REVEAL</div>
                            </div>
                            <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 text-paper-body bg-[#E2DFD8] paper-texture transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] ${revealOne ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
-                              <p className="text-xl sm:text-2xl md:text-3xl font-bold italic leading-tight px-4 text-center" style={{ fontFamily: 'EB Garamond, serif' }}>Premature commitment and <br /> Intransparent rules.</p>
+                              <p className="text-xl sm:text-2xl md:text-3xl font-bold italic leading-tight px-4 text-center" style={{ fontFamily: 'EB Garamond, serif' }}>Premature commitment and Intransparent rules.</p>
                            </div>
                         </div>
                      </div>
@@ -389,7 +374,7 @@ body {
                               <div className="mt-12 text-label text-brand-red group-hover:scale-110 transition-transform duration-300">CLICK TO REVEAL</div>
                            </div>
                            <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 text-paper-body bg-[#E2DFD8] paper-texture transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] ${revealTwo ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
-                              <p className="text-xl sm:text-2xl md:text-3xl font-bold italic leading-tight px-4 text-center" style={{ fontFamily: 'EB Garamond, serif' }}>Align mental models <br /> across steps.</p>
+                              <p className="text-xl sm:text-2xl md:text-3xl font-bold italic leading-tight px-4 text-center" style={{ fontFamily: 'EB Garamond, serif' }}>Align mental models across steps.</p>
                            </div>
                         </div>
                      </div>
@@ -548,7 +533,7 @@ body {
                            <div className="md:col-span-4 space-y-10">
                               <div className="space-y-1">
                                  <p className="text-label text-[#737373]">Dossier No.</p>
-                                 <p className="text-body-standard font-bold tracking-tight border-l-2 border-black/10 pl-3">Eligibility Reframing // Current Account</p>
+                                 <p className="text-body-standard font-bold tracking-tight border-l border-black/10 pl-3 leading-tight text-[18px]">Eligibility Reframing // <br/>Current Account</p>
                               </div>
                               <div className="space-y-1">
                                  <p className="text-label text-[#737373]">Designer</p>
@@ -564,23 +549,23 @@ body {
                               <div className="space-y-4">
                                  <p className="text-label text-[#737373]">Problem</p>
                                  <p className="text-body-standard leading-relaxed">
-                                    High drop-offs at eligibility due to premature commitment and rule opacity. Users were forced into loops and abandonment.
+                                    Leveraged analytics to reveal high drop-offs at current account application eligibility due to premature commitment and rule opacity.
                                  </p>
                               </div>
 
                               <div className="space-y-4">
                                  <p className="text-label text-[#737373]">Solution</p>
                                  <p className="text-body-standard leading-relaxed">
-                                    Prioritised exploration, guidance and assurance. Replaced the killer gatekeeper with an assuring concierge model. Used strategic priming and microcopy to ease users into the application.
+                                    To meet high-velocity launch targets, I prioritised <b>data-led strategy</b> over testing for Day 1, priming user expectation to allow exploration. I also drove additional user validation to refine high-stakes eligibility clarity for Day 2 improvement.
                                  </p>
                               </div>
 
                               <div className="space-y-4">
                                 <p className="text-label text-[#737373]">Next steps</p>
-                                <div className="text-body-standard space-y-4 opacity-90 border-l border-black/10 pl-6">
-                                   <p className="flex gap-3"><span>•</span> <span>Continuous performance monitoring.</span></p>
-                                   <p className="flex gap-3"><span>•</span> <span>Gathering follow up qualitative feedback.</span></p>
-                                   <p className="flex gap-3"><span>•</span> <span>Ongoing alignment and refinement with stakeholders.</span></p>
+                                <div className="text-body-standard space-y-4 opacity-90 border-l border-black/10 pl-6 text-[18px]">
+                                   <p className="flex gap-3"><span>•</span> <span>Scheduled day 1 launch in April with a <b>2%</b> projected submission rate uplift.</span></p>
+                                   <p className="flex gap-3"><span>•</span> <span>Conducted <b>usability testing</b> to refine high-stakes eligibility clarity, scheduled for day 2 release.</span></p>
+                                   <p className="flex gap-3"><span>•</span> <span>Established <b>further testing and tracking</b> plans to guide future data-led iterations.</span></p>
                                 </div>
                               </div>
                            </div>
