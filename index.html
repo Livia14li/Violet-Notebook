@@ -1,466 +1,629 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Livia Li | The UX stories</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&family=La+Belle+Aurore&family=Space+Mono&family=Caveat:wght@400..700&family=EB+Garamond:ital,wght@0,300;1,300&family=Nanum+Brush+Script&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --royal-violet: #3E173A;
-            --aged-parchment: #dfc9a5;   
-            --cinema-white: #f8f8f8;    
-            --cinema-void: #050505;     
-            --shimmer-bronze: #C09304;   
-            --blood-ink: #8A0303;      
-            --ornament-dot: #6C1708;
-            --lush-blue: #065F82;    
-            --crimson-red: #A64522; /* 锁定：手动修改的橙红色 */
+<meta charset="utf-8" />
+<title>Livia Li's UX Tales</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&family=IM+Fell+English:ital@0;1&family=IM+Fell+DW+Pica:ital@0;1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-            /* Warmth 洇染配色 */
-            --warmth-bg: #F7EEE9;
-            --orange: #D34A00;      
-            --orange-deep: #E64322; 
-            --peach: #F1948A;
-        }
+<style>
+  :root {
+    --bg: #08040a; 
+    --bg-2: #120814;
+    --ember: #e8b450;
+    --ember-bright: #f5d180;
+    --ink: #f0e2bc;
+    --dim: 0.45;
+    
+    /* Warmth Palette */
+    --warmth-bg: #F7EEE9;
+    --orange: #e67e22;
+    --orange-deep: #d35400;
+    --peach: #ffb38a;
+  }
 
-        * { scroll-behavior: smooth; cursor: none; }
-        @media (max-width: 768px) { * { cursor: auto !important; } #cursor { display: none !important; } }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'IM Fell English', serif;
+    overflow: hidden;
+    cursor: default;
+    font-size: 16px;
+    transition: background-color 0.5s ease;
+  }
 
-        body {
-            background-color: var(--royal-violet);
-            color: var(--aged-parchment);
-            font-family: 'Cormorant Garamond', serif;
-            overflow: hidden;
-            margin: 0;
-            touch-action: manipulation;
-        }
+  .stage {
+    position: fixed; inset: 0;
+    overflow: hidden;
+    background: var(--bg);
+    transition: background 0.8s ease;
+  }
+  .stage::before {
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95  0 0 0 0 0.85  0 0 0 0 0.65  0 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.05'/></svg>");
+    opacity: 0.05; mix-blend-mode: overlay; z-index: 30;
+    transition: opacity 0.5s ease;
+  }
+  .stage::after {
+    content:""; position:absolute; inset:0; pointer-events:none; z-index: 31;
+    background: radial-gradient(ellipse 95% 80% at 50% 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.6) 100%);
+    transition: opacity 0.5s ease;
+  }
 
-        /* --- 最终锁定的“小太阳”光标样式 --- */
-        #cursor {
-            width: 6px; height: 6px;
-            background: var(--shimmer-bronze); /* 中心黄色核心 */
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            /* 统一的多层深橙色柔和渐变晕染 */
-            box-shadow: 
-                0 0 6px 2.5px var(--crimson-red),      /* 核心加深层 */
-                0 0 20px 5px rgba(166, 69, 34, 0.9),    /* 中间增强层 */
-                0 0 35px rgba(166, 69, 34, 0.4);        /* 边缘扩散层 */
-            transition: transform 0.1s ease-out, box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: translate(-50%, -50%); 
-        }
+  /* Transition modifiers */
+  .stage.warm-transition { background: var(--warmth-bg); }
+  .stage.warm-transition::before, .stage.warm-transition::after { opacity: 0; }
 
-        .view { position: fixed; inset: 0; display: none; z-index: 10; }
-        .view.active { display: block; }
+  #book-archive-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 40;
+    transition: opacity 0.8s ease;
+  }
 
-        /* --- Archive View --- */
-        .book-wrapper {
-            perspective: 2500px; display: flex; align-items: center; justify-content: center;
-            min-height: 100vh; position: relative; padding: 20px; z-index: 20; transition: opacity 0.5s ease;
-        }
-        .mystic-field { position: absolute; top: 50%; left: 50%; width: 0; height: 0; z-index: 5; pointer-events: none; transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1); }
-        .mystic-symbol { position: absolute; top: 0; left: 0; opacity: 0; animation: riverFlow var(--dur) infinite ease-in-out; white-space: nowrap; }
-        @keyframes riverFlow {
-            0% { transform: translate(0, 0) scale(0.1); opacity: 0; }
-            10% { opacity: 0.85; transform: translate(calc(var(--tx) * 0.12), calc(var(--ty) * 0.12)) scale(0.4); }
-            100% { transform: translate(var(--tx), calc(var(--ty) + var(--hookY))) scale(var(--s)); opacity: 0; }
-        }
-        .book { width: 380px; height: 520px; position: relative; transform-style: preserve-3d; transition: transform 1.6s cubic-bezier(0.4, 0, 0.2, 1); }
-        @media (min-width: 769px) { .book.open { transform: translateX(190px); } }
-        .book-page-flip { position: absolute; inset: 0; transform-style: preserve-3d; transform-origin: left; transition: transform 1.8s cubic-bezier(0.6, 0, 0.4, 1); z-index: 10; }
-        .book.open .book-page-flip { transform: rotateY(-180deg); }
-        .book-cover-front { position: absolute; inset: 0; background: #2a1028; background-image: url("https://www.transparenttextures.com/patterns/leather.png"); border-radius: 4px 10px 10px 4px; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; }
-        .dot-ornament { width: 14px; height: 14px; background-color: var(--ornament-dot); border-radius: 50%; box-shadow: inset 0 1px 2px rgba(0,0,0,0.4), 0 1px 1px rgba(255,255,255,0.05); }
-        .book-inside-right { position: absolute; inset: 0; background: var(--aged-parchment); background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png"); padding: 4rem 2.5rem; color: #1a0b26; border-radius: 0 10px 10px 0; z-index: 5; display: flex; flex-direction: column; overflow: hidden; }
-        .book-back-cover { position: absolute; inset: 0; background: var(--aged-parchment); background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png"); padding: 4rem 2.5rem; color: #1a0b26; border-radius: 10px 0 0 10px; transform: rotateY(180deg); backface-visibility: hidden; }
+  header.title {
+    position: absolute;
+    top: clamp(60px, 10vh, 100px); 
+    left: 0; right: 0;
+    text-align: center;
+    z-index: 40;
+    pointer-events: none;
+    padding: 0 24px;
+  }
+  h1.tales {
+    font-family: 'IM Fell English', 'Cinzel', serif;
+    font-weight: 400; 
+    font-size: clamp(32px, 5vw, 64px);
+    letter-spacing: 0.05em;
+    color: var(--ember-bright);
+    filter: drop-shadow(0 0 15px rgba(232,180,80,0.2));
+    animation: emberFlicker 6s ease-in-out infinite;
+  }
+  .tagline {
+    margin-top: 12px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px; 
+    color: rgba(240,226,188,0.8);
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    max-width: 95vw;
+    margin-left: auto;
+    margin-right: auto;
+    white-space: nowrap;
+  }
 
-        .scrambled-container { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; line-height: 1.8; cursor: pointer; word-wrap: break-word; overflow-wrap: anywhere; white-space: pre-wrap; width: 100%; }
-        .word-node { display: inline-block; }
-        .interactive-word { font-weight: 700; text-decoration: underline !important; text-decoration-thickness: 2px !important; text-underline-offset: 8px; display: inline-block; padding: 0 0.1rem; transition: filter 0.3s ease; }
-        .word-data { color: var(--lush-blue); }
-        .word-warmth { color: var(--crimson-red); }
-        .interactive-word:hover { filter: brightness(1.2); }
-        
-        /* 锁定：Desktop 签名与触发词大小 2.5rem */
-        .doodle-trigger { font-family: 'La Belle Aurore', cursive; font-size: 2.5rem; color: var(--blood-ink); opacity: 0.85; margin-top: auto; margin-bottom: 6.5rem; cursor: pointer; transition: 0.3s ease; width: fit-content; }
-        .doodle-trigger:hover { opacity: 1; transform: scale(1.05); }
+  @keyframes emberFlicker {
+    0%, 100% { filter: drop-shadow(0 0 12px rgba(232,180,80,0.15)); }
+    50% { filter: drop-shadow(0 0 18px rgba(232,180,80,0.25)); }
+  }
 
-        /* --- Warmth Watercolor Bloom Transition --- */
-        #fx-stage { position: fixed; inset: 0; z-index: 200; pointer-events: none; }
-        .watercolor-bloom {
-            position: absolute; width: 450px; height: 450px;
-            background: radial-gradient(circle at center, #FFFFFF 0%, var(--warmth-bg) 10%, var(--orange) 35%, var(--orange-deep) 60%, var(--peach) 85%, transparent 100%);
-            border-radius: 50%; filter: url(#liquid-filter) blur(75px); opacity: 0; transform: translate(-50%, -50%) scale(0);
-        }
-        .watercolor-bloom.active { animation: orangeSoak 3s cubic-bezier(0.7, 0, 0.2, 1) forwards; }
-        @keyframes orangeSoak {
-            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
-            12% { opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(80) rotate(8deg); opacity: 1; }
-        }
-        #final-wash { position: fixed; inset: 0; background: var(--warmth-bg); z-index: 300; opacity: 0; pointer-events: none; transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1); }
-        #final-wash.active { opacity: 1; }
+  #summary-display {
+    position: absolute;
+    top: clamp(190px, 28vh, 340px); 
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(320px, 90vw, 900px);
+    text-align: left; 
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.6s cubic-bezier(.2,.8,.2,1);
+  }
+  #summary-display.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-2px);
+  }
 
-        /* --- Film View (Data) --- */
-        #view-data { background: var(--cinema-void); overflow: hidden; }
-        .film-texture { position: absolute; inset: 0; background-image: url("https://www.transparenttextures.com/patterns/stardust.png"); opacity: 0.12; pointer-events: none; z-index: 50; transition: opacity 1s ease; }
-        #film-strip { position: relative; width: 100vw; height: 100vh; transition: transform 4.5s cubic-bezier(0.85, 0, 0.15, 1); transform-style: preserve-3d; }
-        .film-container { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; width: 100vw; z-index: 10; }
-        #void-state { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; z-index: 100; }
-        .ornate-film-frame { position: absolute; inset: 6vw; pointer-events: none; opacity: 0; transition: opacity 1.5s ease; filter: url(#jitter); display: flex; align-items: center; justify-content: center; }
-        @media (min-width: 768px){ .ornate-film-frame { inset: 12.5vh 8vw; transform: scaleX(0.9); } } /* 保持 75vh 边框逻辑 */
-        .ornate-film-frame.visible { opacity: 1; }
-        .frame-inner-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-        .silent-text-content { position: relative; max-width: 800px; width: 80%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: var(--cinema-white); opacity: 0; transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); z-index: 20; height: auto; }
-        .silent-text-content.active { opacity: 1; }
-        .film-dialogue { font-size: 2.5rem; line-height: 1.6; font-style: italic; display: block; }
-        .drop-cap { font-size: 5.5rem; line-height: 0.6; font-weight: 600; font-style: normal; display: inline-block; }
-        .grungy-btn { background: transparent; border: 1.5px solid var(--cinema-white); color: var(--cinema-white); padding: 1rem 2.5rem; font-family: 'Space Mono', monospace; font-size: 0.85rem; letter-spacing: 0.5em; text-transform: uppercase; cursor: pointer; border-radius: 100px; white-space: nowrap; filter: url(#jitter); }
-        .grungy-btn:hover { background: var(--cinema-white); color: var(--cinema-void); }
-        #investigate-trigger { display: block; opacity: 0; max-height: 0; overflow: hidden; transform: translateY(20px); transition: 1.4s cubic-bezier(0.4, 0, 0.2, 1); margin-top: 0; pointer-events: none; }
-        #investigate-trigger.visible { max-height: 200px; opacity: 1; transform: translateY(0); margin-top: 3rem; pointer-events: auto; }
+  .summary-connector {
+    position: absolute;
+    top: 6px; 
+    left: var(--connector-x, 0);
+    width: 1px;
+    height: calc(100% + 4px); 
+    background: linear-gradient(to bottom, transparent 0%, var(--ember) 20%, var(--ember) 80%, transparent 100%);
+    opacity: 0.45;
+    transition: left 0.6s cubic-bezier(.2,.8,.2,1);
+  }
 
-        /* Film Reel Effects */
-        .reel-flicker-overlay { position: fixed; inset: 0; background: white; z-index: 1000; pointer-events: none; opacity: 0; }
-        .spinning .reel-flicker-overlay { animation: projectorShutter 0.08s infinite steps(2); }
-        @keyframes projectorShutter { 0% { opacity: 0; } 100% { opacity: 0.08; } }
-        .fuzz-frame { height: 100vh; width: 100vw; display: flex; align-items: center; justify-content: center; background: var(--cinema-void); position: relative; overflow: hidden; }
-        .fuzz-content { width: 100%; height: 100%; background-image: url("https://www.transparenttextures.com/patterns/stardust.png"); opacity: 0.3; animation: fuzzShake 0.1s infinite steps(2); }
-        @keyframes fuzzShake { 0% { transform: translate(10px, -5px) scale(1.1); } 50% { transform: translate(-5px, 10px) scale(1.2); } 100% { transform: translate(0,0) scale(1.1); } }
+  .summary-content {
+    padding-left: 20px; 
+    padding-top: 4px;
+    margin-left: var(--connector-x, 0);
+    transition: margin-left 0.6s cubic-bezier(.2,.8,.2,1);
+    max-width: 650px; 
+  }
 
-        @media (max-width: 768px) {
-            .book { width: 280px; height: 400px; }
-            .book.open { transform: translateY(0); }
-            .book-inside-right { padding: 3rem 1.5rem; }
-            .scrambled-container { font-size: 1.4rem; line-height: 1.9; } 
-            .doodle-trigger { font-size: 1.85rem; margin-top: 2rem; margin-bottom: 2rem; }
-            .ornate-film-frame { inset: 12.5vh 6vw; } /* 锁定：75vh */
-            .film-dialogue { font-size: 2rem; }
-            .drop-cap { font-size: 3rem; }
-            .silent-text-content { width: 75%; } 
-            #investigate-trigger.visible { margin-top: 2rem; }
-        }
+  .summary-fact {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 18px;
+    color: rgba(232, 180, 80, 0.8);
+    margin-bottom: 4px;
+  }
+  .summary-text {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.3;
+    color: rgba(240, 226, 188, 0.9);
+    white-space: nowrap; 
+  }
 
-        #transition-overlay { position: fixed; inset: 0; z-index: 999; pointer-events: none; opacity: 0; background: var(--cinema-void); transition: opacity 0.5s ease; }
-        #transition-overlay.active { opacity: 1; pointer-events: auto; }
-        #data-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: none; }
-        .hand { font-family: 'Caveat', cursive; font-weight: 300; } 
-        .mono { font-family: 'Space Mono', monospace; font-size: 0.55rem; letter-spacing: 0.4em; text-transform: uppercase; }
-        .paper-grain { position: fixed; inset: 0; pointer-events: none; opacity: 0.04; mix-blend-mode: multiply; background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png"); z-index: 1000; }
-    </style>
+  .shelf-wrap {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    padding-top: clamp(225px, 31vh, 390px);
+    background: radial-gradient(ellipse at 50% 65%, rgba(232, 180, 80, 0.05) 0%, transparent 50%);
+  }
+  .shelf {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: clamp(12px, 3.5vw, 45px);
+    padding: 0 clamp(12px, 2vw, 30px);
+  }
+
+  .book {
+    position: relative;
+    width: clamp(65px, 10vw, 115px); 
+    height: clamp(285px, 50vh, 440px); 
+    text-decoration: none;
+    color: inherit;
+    transform-origin: bottom center;
+    transition: transform 850ms cubic-bezier(.2,.8,.2,1);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .spine {
+    position: relative; z-index: 3;
+    width: 100%; height: 100%;
+    border-radius: 2px; overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.4);
+    filter: brightness(var(--dim)) saturate(0.75);
+    transition: filter 600ms ease;
+  }
+  .spine::before {
+    content:""; position: absolute; inset: 0;
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 22%, rgba(255,255,255,0) 50%, rgba(0,0,0,0.15) 100%);
+  }
+
+  .shelf:hover .book .spine { filter: brightness(1.0) saturate(1.05); }
+  .book:hover .spine { filter: brightness(1.18) saturate(1.15); }
+  .book:hover { transform: translateY(-15px); z-index: 5; }
+
+  .book.blue .spine    { background: linear-gradient(180deg, #345990 0%, #102145 100%); }
+  .book.red .spine     { background: linear-gradient(180deg, #9c3030 0%, #350c0c 100%); }
+  .book.purple .spine  { background: linear-gradient(180deg, #6c3a96 0%, #200d3a 100%); }
+
+  .rule {
+    position: absolute; left: 15%; right: 15%; height: 1px;
+    background: var(--ember); opacity: 0.12;
+  }
+  .rule.t1 { top: 7%; } .rule.t2 { top: 9.5%; }
+  .rule.b1 { bottom: 7%; } .rule.b2 { bottom: 9.5%; }
+  .rule.mid { top: 28%; }
+
+  .emblem {
+    position: absolute; 
+    left: 50%; top: 16%; 
+    transform: translate(-50%, 0);
+    width: 32%; aspect-ratio: 1/1;
+    color: var(--ember-bright); 
+    opacity: 0.25;
+    pointer-events: none;
+  }
+  .emblem svg { width: 100%; height: 100%; }
+
+  .explore-btn {
+    position: absolute;
+    top: 54%; 
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    width: 80%;
+  }
+
+  .explore-label {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    color: var(--ember-bright);
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    border: 1px solid rgba(245, 209, 128, 0.3);
+    padding: 6px 12px;
+    min-width: 44px;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.2);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Specifically for the "Coming soon" state without the box styling and without bold weight */
+  .explore-label.plain {
+    border: none;
+    background: none;
+    padding: 0;
+    white-space: normal;
+    width: 130%;
+    line-height: 1.3;
+    font-weight: 400;
+    font-size: 12px;
+  }
+
+  .book:hover .explore-label { opacity: 0.9; transform: translateY(0); }
+
+  .name {
+    position: absolute; 
+    left: 50%; top: 40%; width: 95%;
+    transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif; 
+    font-weight: 500;
+    font-size: clamp(16px, 1.8vw, 20px); 
+    color: #fff;
+    text-shadow: 0 0 12px rgba(232,180,80,0.5);
+    text-align: center;
+    line-height: 1.1;
+  }
+
+  .particles {
+    position: absolute; inset: 0; z-index: 1;
+    pointer-events: none;
+  }
+  .spark.dot {
+    position: absolute; left: 50%; top: 50%;
+    width: 2px; height: 2px; border-radius: 50%;
+    background: var(--ember-bright);
+    opacity: 0.8;
+    animation: scatter var(--dur, 9s) ease-out infinite;
+    animation-delay: var(--delay);
+  }
+
+  @keyframes scatter {
+    0%   { opacity: 0.8; transform: translate(-50%, -50%) scale(0.2); }
+    85%  { opacity: 0.8; }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.1); }
+  }
+
+  /* --- Transitions --- */
+  
+  #data-overlay {
+    position: fixed; inset: 0; background: #050505; z-index: 1000;
+    opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+  }
+  #data-overlay.active { opacity: 1; pointer-events: all; }
+  #data-canvas {
+    position: fixed; inset: 0; z-index: 1001; display: none; pointer-events: none;
+  }
+
+  #fx-stage { position: fixed; inset: 0; z-index: 1000; pointer-events: none; }
+  .watercolor-bloom {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle at center, 
+        #FFFFFF 0%, 
+        var(--warmth-bg) 10%, 
+        var(--orange) 35%, 
+        var(--orange-deep) 60%, 
+        var(--peach) 85%, 
+        transparent 100%);
+    border-radius: 50%;
+    filter: url(#liquid-filter) blur(75px); 
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  .watercolor-bloom.active {
+    animation: orangeSoak 3s cubic-bezier(0.7, 0, 0.2, 1) forwards;
+  }
+  @keyframes orangeSoak {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 0; }
+    12% { opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(80) rotate(8deg); opacity: 1; }
+  }
+  #final-wash { 
+    position: fixed; inset: 0; background: var(--warmth-bg); z-index: 1001; 
+    opacity: 0; pointer-events: none; transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1); 
+  }
+  #final-wash.active { opacity: 1; pointer-events: all; }
+
+  /* Desktop Adjustments Only */
+  @media (min-width: 1025px) {
+    .explore-btn { top: 56%; }
+    .book:hover { transform: translateY(-20px); }
+  }
+
+  @media (max-width: 1024px) and (min-width: 721px) {
+    .tagline { white-space: normal; max-width: 600px; }
+  }
+
+  /* Mobile Viewport */
+  @media (max-width: 720px) {
+    header.title { top: clamp(40px, 8vh, 70px); }
+    h1.tales { font-size: clamp(32px, 9vw, 44px); }
+    .tagline { 
+      font-size: 18px; 
+      margin-top: 6px; 
+      white-space: normal; 
+      max-width: 85vw;
+    }
+    #summary-display { top: clamp(160px, 28vh, 230px); width: 92vw; }
+    .summary-content { padding-left: 14px; max-width: calc(92vw - 20px); }
+    .summary-text { font-size: 15px; white-space: normal; }
+    .shelf-wrap { padding-top: clamp(220px, 36vh, 340px); }
+    .book { width: clamp(65px, 22vw, 85px); height: clamp(220px, 42vh, 330px); }
+    .book:hover { transform: translateY(-10px); }
+    .name { font-size: 16px; width: 95%; }
+    .explore-btn { top: 60%; } 
+  }
+</style>
 </head>
-<body id="body-main">
-    <svg width="0" height="0" style="position: absolute;">
-        <filter id="liquid-filter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="40" />
-            <feDisplacementMap in="SourceGraphic" scale="120" />
-        </filter>
-        <filter id="jitter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" />
-        </filter>
-    </svg>
+<body>
 
-    <div id="cursor"></div>
-    <div class="reel-flicker-overlay"></div>
-    <div id="transition-overlay"><canvas id="data-canvas"></canvas></div>
-    <div class="paper-grain"></div>
+<div class="stage" id="main-stage">
+  <div id="book-archive-wrapper">
+    <header class="title">
+      <h1 class="tales">Livia Li's UX Tales</h1>
+      <p class="tagline">Driving business value through radical strategy rooted in analytics and human insights</p>
+    </header>
 
-    <!-- Warmth Bloom Stage -->
-    <div id="fx-stage">
-        <div id="fx-bloom" class="watercolor-bloom"></div>
+    <div id="summary-display">
+      <div class="summary-connector" id="sum-connector"></div>
+      <div class="summary-content" id="sum-content">
+        <div class="summary-fact" id="sum-fact"></div>
+        <div class="summary-text" id="sum-text"></div>
+      </div>
     </div>
-    <div id="final-wash"></div>
 
-    <!-- VIEW: Archive -->
-    <section class="view active" id="view-archive">
-        <div class="mystic-field" id="mystic-field"></div>
-        <div class="book-wrapper" id="book-archive-wrapper">
-            <div class="book" id="grimoire">
-                <div class="book-page-flip">
-                    <div class="book-cover-front"><div class="dot-ornament"></div></div>
-                    <div class="book-back-cover">
-                        <div class="hidden md:block">
-                            <p class="mono opacity-40">ENTRY.01</p>
-                            <div style="font-style: italic;" class="text-2xl mt-12">If found, please return to:</div>
-                            <!-- 锁定：Desktop 签名 2.5rem -->
-                            <div class="hand text-[2.5rem] mt-6 opacity-85" style="color: #1a0b26;">Livia Li</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="book-inside-right">
-                    <p class="mono mb-11 opacity-40">SPRING.2026</p>
-                    <div class="scrambled-container" id="scrambled-game"></div>
-                    <div class="doodle-trigger" id="doodle-resolve">Piercing?</div>
-                </div>
+    <main class="shelf-wrap">
+      <nav class="shelf" id="main-shelf">
+        <a class="book blue" href="#" data-url="/data-case"
+           data-fact="Mobile, 2 weeks, +2% total conversations"
+           data-text="Reframing killer questions to guided paths">
+          <div class="particles" data-particles></div>
+          <div class="spine">
+            <span class="rule t1"></span><span class="rule t2"></span>
+            <div class="emblem">
+               <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="32" cy="32" r="20"/><path d="M32 10 L32 54 M10 32 L54 32"/><circle cx="32" cy="32" r="2.5" fill="currentColor"/></svg>
             </div>
-        </div>
-    </section>
-
-    <!-- VIEW: Warmth Placeholder -->
-    <section class="view" id="view-warmth"></section>
-
-    <!-- VIEW: Data (Film Strip) -->
-    <section class="view" id="view-data">
-        <div class="film-texture"></div>
-        <div id="film-strip">
-            <div class="film-container">
-                <div class="ornate-film-frame" id="intertitle-frame">
-                    <svg class="frame-inner-svg" viewBox="0 0 1000 600" preserveAspectRatio="none">
-                        <path d="M50,10 L950,10 L950,50 L990,50 L990,550 L950,550 L950,590 L50,590 L50,550 L10,550 L10,50 L50,50 Z" fill="none" stroke="rgba(248,248,248,0.7)" stroke-width="2" />
-                    </svg>
-                </div>
-                <div id="void-state">
-                    <button class="grungy-btn" onclick="startFilmFlow()">Where am I?</button>
-                </div>
-                <div id="film-text-area" class="silent-text-content">
-                    <div id="dialogue-display" class="w-full"></div>
-                    <div id="investigate-trigger">
-                        <button class="grungy-btn" onclick="revealCaseStudy()">Investigate</button>
-                    </div>
-                </div>
+            <span class="rule mid"></span>
+            <div class="name">Data<br/>Case</div>
+            <div class="explore-btn">
+              <span class="explore-label">EXPLORE</span>
             </div>
-            <div class="fuzz-frame"><div class="fuzz-content"></div></div>
-            <div class="fuzz-frame"><div class="fuzz-content" style="transform: rotate(180deg);"></div></div>
-            <div class="fuzz-frame"><div class="fuzz-content"></div></div>
-            <div class="film-container bg-black"></div>
-        </div>
-    </section>
+            <span class="rule b1"></span><span class="rule b2"></span>
+          </div>
+        </a>
 
-    <script>
-        const cursor = document.getElementById('cursor');
-        const book = document.getElementById('grimoire');
-        const container = document.getElementById('scrambled-game');
-        const doodleResolve = document.getElementById('doodle-resolve');
-        const mysticField = document.getElementById('mystic-field');
-        const overlay = document.getElementById('transition-overlay');
-        const dataCanvas = document.getElementById('data-canvas');
-        const strip = document.getElementById('film-strip');
-        
-        const bloom = document.getElementById('fx-bloom');
-        const wash = document.getElementById('final-wash');
-        
-        const targetSentence = "Piercing through data to infuse systematic warmth";
-        let isResolved = false;
-        let scrambleInterval = null;
-        const isMobile = window.innerWidth <= 768;
+        <a class="book red" href="#" data-url="/warmth-archive"
+           data-fact="Mobile, 3 months, 14.4k annual applications"
+           data-text="Joint application matched to relation dynamics">
+          <div class="particles" data-particles></div>
+          <div class="spine">
+            <span class="rule t1"></span><span class="rule t2"></span>
+            <div class="emblem">
+              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M32 50 C18 40, 12 28, 18 20 C22 14, 30 14, 32 22 C34 14, 42 14, 46 20 C52 28, 46 40, 32 50 Z"/></svg>
+            </div>
+            <span class="rule mid"></span>
+            <div class="name">Warmth<br/>Archive</div>
+            <div class="explore-btn">
+              <span class="explore-label">EXPLORE</span>
+            </div>
+            <span class="rule b1"></span><span class="rule b2"></span>
+          </div>
+        </a>
 
-        /* --- 锁定版光标跟随 (全局统一“太阳”效果) --- */
-        if(!isMobile) {
-            document.addEventListener('mousemove', (e) => {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-            });
-        }
+        <a class="book purple" href="#" data-url="/about-livia"
+           data-fact="3 yrs experience"
+           data-text="Love dancing and crafting">
+          <div class="particles" data-particles></div>
+          <div class="spine">
+            <span class="rule t1"></span><span class="rule t2"></span>
+            <div class="emblem">
+              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M32 8 L36 26 L54 28 L40 38 L46 56 L32 46 L18 56 L24 38 L10 28 L28 26 Z"/></svg>
+            </div>
+            <span class="rule mid"></span>
+            <div class="name">About<br/>Livia</div>
+            <div class="explore-btn">
+              <span class="explore-label">EXPLORE</span>
+            </div>
+            <span class="rule b1"></span><span class="rule b2"></span>
+          </div>
+        </a>
+      </nav>
+    </main>
+  </div>
+</div>
 
-        const symbols = ['✿', '❀', '❁', '✾', '❊', '❃', '✻', '❋', '★', '♩', '♪', '♫', '♬'];
-        for(let i=0; i<(isMobile ? 120 : 250); i++) {
-            const s = document.createElement('div');
-            s.className = 'mystic-symbol';
-            s.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-            const isTR = Math.random() > 0.5;
-            let tx = isTR ? 800 + Math.random() * 1200 : -800 - Math.random() * 1200;
-            let ty = isTR ? -800 - Math.random() * 1200 : 800 + Math.random() * 1200;
-            s.style.setProperty('--tx', `${tx}px`); s.style.setProperty('--ty', `${ty}px`);
-            s.style.setProperty('--hookY', (ty < 0 ? 300 : -300) + 'px');
-            if (isMobile) s.style.setProperty('--s', 1.8 + Math.random() * 3); 
-            else s.style.setProperty('--s', isTR ? 1.3 + Math.random() * 2.7 : 2.5 + Math.random() * 3.5);
-            s.style.setProperty('--dur', `${140 + Math.random() * 140}s`);
-            s.style.color = ['#026AAC', '#C09304', '#BF3F29', '#D43890'][Math.floor(Math.random()*4)];
-            s.style.animationDelay = -(Math.random() * 200) + 's';
-            s.style.fontSize = isMobile ? '35px' : '32px'; 
-            mysticField.appendChild(s);
-        }
+<div id="data-overlay"></div>
+<canvas id="data-canvas"></canvas>
 
-        function getShuffledChars() {
-            const arr = targetSentence.split('');
-            const first = arr[0]; const rest = arr.slice(1);
-            for (let i = rest.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [rest[i], rest[j]] = [rest[j], rest[i]];
-            }
-            return [first, ...rest];
-        }
+<div id="fx-stage">
+    <div id="fx-bloom" class="watercolor-bloom"></div>
+</div>
+<div id="final-wash"></div>
 
-        function createSlots() {
-            container.innerHTML = '';
-            getShuffledChars().forEach(char => {
-                const span = document.createElement('span');
-                span.textContent = char === ' ' ? '\u00A0' : char;
-                span.className = 'char-slot';
-                container.appendChild(span);
-            });
-        }
-        createSlots();
+<!-- SVG Filter -->
+<svg style="visibility: hidden; position: absolute;" width="0" height="0">
+  <filter id="liquid-filter">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="40" />
+    <feDisplacementMap in="SourceGraphic" scale="120" />
+  </filter>
+</svg>
 
-        function scramble() {
-            if (isResolved) return;
-            const slots = container.querySelectorAll('.char-slot');
-            const shuffled = getShuffledChars();
-            slots.forEach((slot, i) => { if (slot && shuffled[i]) slot.textContent = shuffled[i] === ' ' ? '\u00A0' : shuffled[i]; });
-        }
+<script>
+const isMobile = 'ontouchstart' in window;
+const dataCanvas = document.getElementById('data-canvas');
+const dataOverlay = document.getElementById('data-overlay');
+const fxBloom = document.getElementById('fx-bloom');
+const wash = document.getElementById('final-wash');
+const mainStage = document.getElementById('main-stage');
 
-        if(!isMobile) {
-            container.addEventListener('mouseenter', () => { if(!isResolved && !scrambleInterval) scrambleInterval = setInterval(scramble, 80); });
-            container.addEventListener('mouseleave', () => { clearInterval(scrambleInterval); scrambleInterval = null; });
-        } else {
-            setInterval(() => { if(!isResolved && book.classList.contains('open')) scramble(); }, 120);
-        }
+function buildSparkles() {
+  document.querySelectorAll('[data-particles]').forEach(host => {
+    host.innerHTML = '';
+    const particleCount = 52; 
+    for(let i=0; i < particleCount; i++){
+      const s = document.createElement('span');
+      s.className = 'spark dot';
+      const angle = Math.random() * Math.PI * 2; 
+      const distance = 40 + Math.random() * 95;
+      const dx = Math.cos(angle) * distance;
+      const dy = Math.sin(angle) * distance;
+      s.style.setProperty('--dx', dx.toFixed(2) + 'px');
+      s.style.setProperty('--dy', dy.toFixed(2) + 'px');
+      const dur = (7 + Math.random() * 6);
+      s.style.setProperty('--dur', dur + 's');
+      s.style.setProperty('--delay', (Math.random() * -dur) + 's');
+      host.appendChild(s);
+    }
+  });
+}
 
-        async function triggerRevealSequence() {
-            isResolved = true; clearInterval(scrambleInterval);
-            const words = targetSentence.split(' ');
-            container.innerHTML = '';
-            words.forEach((word, wordIdx) => {
-                const wordNode = document.createElement('span');
-                wordNode.className = 'word-node';
-                const lower = word.toLowerCase();
-                if (lower.includes('data') || lower.includes('warmth')) {
-                    wordNode.classList.add('interactive-word', lower.includes('data') ? 'word-data' : 'word-warmth');
-                    wordNode.onclick = (e) => { e.stopPropagation(); lower.includes('data') ? runDataTransition() : runWarmthTransition(e); };
-                }
-                word.split('').forEach(c => {
-                    const s = document.createElement('span'); s.textContent = c; s.style.opacity = '0'; s.style.transition = 'opacity 0.4s';
-                    wordNode.appendChild(s); setTimeout(() => s.style.opacity = '1', 500 + wordIdx * 100);
-                });
-                container.appendChild(wordNode);
-                if (wordIdx < words.length - 1) container.appendChild(document.createTextNode('\u00A0'));
-            });
-            doodleResolve.style.display = 'none';
-        }
-
-        doodleResolve.onclick = (e) => { e.stopPropagation(); triggerRevealSequence(); };
-
-        function switchView(id) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            overlay.classList.remove('active');
-            dataCanvas.style.display = 'none';
-        }
-
-        function runWarmthTransition(e) {
-            const x = e.clientX || window.innerWidth / 2;
-            const y = e.clientY || window.innerHeight / 2;
-            document.getElementById('book-archive-wrapper').style.opacity = '0';
-            document.body.style.backgroundColor = 'var(--warmth-bg)';
-            bloom.style.left = `${x}px`; bloom.style.top = `${y}px`;
-            bloom.classList.add('active');
-            setTimeout(() => { wash.classList.add('active'); }, 2100);
-            setTimeout(() => { window.location.href = 'warmth.html'; }, 2500);
-        }
-
-        function startFilmFlow() {
-            document.getElementById('void-state').style.display = 'none';
-            const frame = document.getElementById('intertitle-frame');
-            const textArea = document.getElementById('film-text-area');
-            const display = document.getElementById('dialogue-display');
-            const trigger = document.getElementById('investigate-trigger');
-            frame.classList.add('visible');
-            setTimeout(() => {
-                display.innerHTML = '<span class="film-dialogue"><span class="drop-cap">W</span>here fog lives ... where a killer walks.</span>';
-                textArea.classList.add('active');
-                setTimeout(() => {
-                    textArea.classList.remove('active');
-                    setTimeout(() => {
-                        display.innerHTML = '<span class="film-dialogue"><span class="drop-cap">T</span>hat name... never speak it.&nbsp;Eligibility.</span>';
-                        textArea.classList.add('active');
-                        setTimeout(() => trigger.classList.add('visible'), 2000); 
-                    }, 800); 
-                }, 2000); 
-            }, 800);
-        }
-
-        function revealCaseStudy() {
-            document.getElementById('body-main').classList.add('spinning');
-            strip.style.transition = 'transform 3s cubic-bezier(0.85, 0, 0.15, 1)'; 
-            strip.style.transform = 'translateY(-400vh)';
-            setTimeout(() => { window.location.href = 'data.html'; }, 3000); 
-        }
-
-        function runDataTransition() {
-            overlay.classList.add('active');
-            dataCanvas.style.display = 'block';
-            const ctx = dataCanvas.getContext('2d');
-            const w = dataCanvas.width = window.innerWidth;
-            const h = dataCanvas.height = window.innerHeight;
-            const count = isMobile ? 110 : 200; 
-            const particles = [];
-            for(let i=0; i<count; i++) {
-                particles.push({
-                    angleOffset: i * 0.1375, baseSize: 18 + Math.random() * 30, char: "0123456789"[Math.floor(Math.random() * 10)],
-                    colorBase: Math.random() > 0.4 ? [192, 214, 223] : [6, 95, 130], life: Math.random() 
-                });
-            }
-            const startTime = performance.now();
-            const duration = 3000;
-            function draw() {
-                const now = performance.now();
-                const progress = now - startTime;
-                const ratio = progress / duration;
-                ctx.fillStyle = `rgba(5, 5, 5, ${0.4 + (ratio * 0.5)})`; ctx.fillRect(0, 0, w, h);
-                const worldSpin = progress * (0.0007 + ratio * 0.005);
-                const lensWobbleX = Math.sin(progress * 0.0008) * (w * 0.04) * (1 - ratio);
-                const lensWobbleY = Math.cos(performance.now() * 0.0008) * (h * 0.04) * (1 - ratio);
-                particles.forEach((p) => {
-                    p.life += 0.006 * (1 + ratio * 0.8); if (p.life > 1) p.life = 0;
-                    const centrifugalVelocity = Math.pow(p.life, 1.7) * (Math.max(w,h) * 2.1);
-                    const currentAngle = p.angleOffset + worldSpin;
-                    const x = (w/2 + lensWobbleX) + Math.cos(currentAngle) * centrifugalVelocity;
-                    const y = (h/2 + lensWobbleY) + Math.sin(currentAngle) * centrifugalVelocity;
-                    const fade = Math.max(0, 1 - centrifugalVelocity / (Math.max(w,h) * 1.8)) * (1 - ratio);
-                    ctx.save(); ctx.translate(x, y); ctx.rotate(currentAngle + Math.PI/2);
-                    ctx.fillStyle = `rgb(${p.colorBase[0]}, ${p.colorBase[1]}, ${p.colorBase[2]})`;
-                    ctx.globalAlpha = 0.2 + fade * 0.8;
-                    ctx.font = `bold ${p.baseSize * (0.2 + Math.pow(p.life, 1.5) * 8)}px Space Mono`;
-                    ctx.fillText(p.char, 0, 0); ctx.restore();
-                });
-                if (progress < duration) requestAnimationFrame(draw);
-                else { ctx.fillStyle = "#050505"; ctx.fillRect(0, 0, w, h); setTimeout(() => switchView('view-data'), 100); }
-            }
-            draw();
-        }
-
-        book.onclick = (e) => { 
-            if(!e.target.closest('.interactive-word') && e.target.id!=='doodle-resolve') { 
-                book.classList.toggle('open'); 
-                mysticField.style.opacity = book.classList.contains('open') ? '0' : '1'; 
-            } 
-        };
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('state') === 'resolved') {
-                const pageFlip = document.querySelector('.book-page-flip');
-                const swiftEase = 'transform 1.9s cubic-bezier(0.3, 0, 0.2, 1)';
-                grimoire.style.transition = swiftEase;
-                if(pageFlip) pageFlip.style.transition = swiftEase;
-                mysticField.style.transition = 'opacity 1.5s ease-out';
-                isResolved = true; clearInterval(scrambleInterval);
-                const words = targetSentence.split(' ');
-                container.innerHTML = ''; 
-                words.forEach((word, wordIdx) => {
-                    const wordNode = document.createElement('span'); wordNode.className = 'word-node';
-                    const lower = word.toLowerCase();
-                    if (lower.includes('data') || lower.includes('warmth')) {
-                        wordNode.classList.add('interactive-word', lower.includes('data') ? 'word-data' : 'word-warmth');
-                        wordNode.onclick = (e) => { e.stopPropagation(); lower.includes('data') ? runDataTransition() : runWarmthTransition(e); };
-                    }
-                    word.split('').forEach(c => {
-                        const s = document.createElement('span'); s.textContent = c; s.style.opacity = '1'; wordNode.appendChild(s);
-                    });
-                    container.appendChild(wordNode);
-                    if (wordIdx < words.length - 1) container.appendChild(document.createTextNode('\u00A0'));
-                });
-                doodleResolve.style.display = 'none'; 
-                setTimeout(() => {
-                    grimoire.classList.add('open'); mysticField.style.opacity = '0';
-                }, 300); 
-            }
+function runDataTransition() {
+    dataOverlay.classList.add('active'); 
+    dataCanvas.style.display = 'block';
+    const ctx = dataCanvas.getContext('2d');
+    const w = dataCanvas.width = window.innerWidth;
+    const h = dataCanvas.height = window.innerHeight;
+    const count = isMobile ? 110 : 200; 
+    const particles = [];
+    for(let i=0; i<count; i++) {
+        particles.push({
+            angleOffset: i * 0.1375, 
+            baseSize: 18 + Math.random() * 30, 
+            char: "0123456789"[Math.floor(Math.random() * 10)],
+            colorBase: Math.random() > 0.4 ? [192, 214, 223] : [6, 95, 130], 
+            life: Math.random() 
         });
-    </script>
+    }
+    const startTime = performance.now();
+    const duration = 3000; 
+    function draw() {
+        const now = performance.now();
+        const progress = now - startTime;
+        const ratio = progress / duration;
+        ctx.fillStyle = `rgba(5, 5, 5, ${0.4 + (ratio * 0.5)})`; 
+        ctx.fillRect(0, 0, w, h);
+        const worldSpin = progress * (0.0007 + ratio * 0.005);
+        const lensWobbleX = Math.sin(progress * 0.0008) * (w * 0.04) * (1 - ratio);
+        const lensWobbleY = Math.cos(now * 0.0008) * (h * 0.04) * (1 - ratio);
+        particles.forEach((p) => {
+            p.life += 0.006 * (1 + ratio * 0.8); 
+            if (p.life > 1) p.life = 0;
+            const centrifugalVelocity = Math.pow(p.life, 1.7) * (Math.max(w,h) * 2.1);
+            const currentAngle = p.angleOffset + worldSpin;
+            const x = (w/2 + lensWobbleX) + Math.cos(currentAngle) * centrifugalVelocity;
+            const y = (h/2 + lensWobbleY) + Math.sin(currentAngle) * centrifugalVelocity;
+            const fade = Math.max(0, 1 - centrifugalVelocity / (Math.max(w,h) * 1.8)) * (1 - ratio);
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(currentAngle + Math.PI/2);
+            ctx.fillStyle = `rgb(${p.colorBase[0]}, ${p.colorBase[1]}, ${p.colorBase[2]})`;
+            ctx.globalAlpha = 0.2 + fade * 0.8;
+            ctx.font = `bold ${p.baseSize * (0.2 + Math.pow(p.life, 1.5) * 8)}px 'Space Mono'`;
+            ctx.fillText(p.char, 0, 0);
+            ctx.restore();
+        });
+        if (progress < duration) {
+            requestAnimationFrame(draw);
+        } else {
+            ctx.fillStyle = "#050505"; 
+            ctx.fillRect(0, 0, w, h);
+            setTimeout(() => { window.location.href = "data.html"; }, 100);
+        }
+    }
+    draw();
+}
+
+function runWarmthTransition(e) {
+    const x = e.clientX || window.innerWidth / 2;
+    const y = e.clientY || window.innerHeight / 2;
+
+    mainStage.classList.add('warm-transition');
+    document.body.style.backgroundColor = 'var(--warmth-bg)';
+    document.getElementById('book-archive-wrapper').style.opacity = '0';
+    
+    fxBloom.style.left = `${x}px`; 
+    fxBloom.style.top = `${y}px`;
+    fxBloom.classList.add('active');
+
+    setTimeout(() => { 
+        wash.classList.add('active'); 
+    }, 2100);
+
+    setTimeout(() => { 
+        window.location.href = 'warmth.html'; 
+    }, 2500);
+}
+
+const display = document.getElementById('summary-display');
+const sumFact = document.getElementById('sum-fact');
+const sumText = document.getElementById('sum-text');
+
+function updateSummary(book) {
+  if (book) {
+    sumFact.textContent = book.dataset.fact;
+    sumText.textContent = book.dataset.text;
+    const bookRect = book.getBoundingClientRect();
+    const displayRect = display.getBoundingClientRect();
+    const connectorX = bookRect.left - displayRect.left;
+    display.style.setProperty('--connector-x', `${connectorX}px`);
+    display.classList.add('active');
+  } else {
+    display.classList.remove('active');
+  }
+}
+
+document.querySelectorAll('.book').forEach(book => {
+  book.addEventListener('mouseenter', () => { updateSummary(book); });
+  book.addEventListener('mouseleave', () => { updateSummary(null); });
+  
+  book.addEventListener('click', (e) => {
+    const clickedExplore = e.target.closest('.explore-btn');
+    const isDataCase = book.classList.contains('blue');
+    const isWarmthArchive = book.classList.contains('red');
+    const isAboutLivia = book.classList.contains('purple');
+
+    if (clickedExplore) {
+      if (isDataCase) {
+        runDataTransition();
+        e.preventDefault();
+      } else if (isWarmthArchive) {
+        runWarmthTransition(e);
+        e.preventDefault();
+      } else if (isAboutLivia) {
+        const label = clickedExplore.querySelector('.explore-label');
+        label.innerHTML = 'Coming<br>soon';
+        label.classList.add('plain');
+        e.preventDefault();
+      }
+    }
+  });
+});
+
+buildSparkles();
+</script>
 </body>
 </html>
