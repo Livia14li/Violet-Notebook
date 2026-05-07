@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case 02 | Balanced Roles</title>
+
+    <!-- Load Dependencies -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body { 
+            background-color: #F7EEE9;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .grungy-back-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1.5px solid rgba(62, 56, 50, 0.85);
+            color: #3E3832;
+            padding: 1.2rem 2rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 100px;
+            text-decoration: none;
+            filter: url(#jitter-case2);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .grungy-back-btn:hover {
+            border-color: #D06741;
+            color: #D06741;
+            transform: scale(1.02);
+        }
+
+        #root:empty { min-height: 100vh; background: #F7EEE9; }
+    </style>
+</head>
+<body>
+
+    <!-- SVG Filters for Grungy Aesthetics -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="jitter-case2">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+        </filter>
+    </svg>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const App = () => {
+          const [scrollProgress, setScrollProgress] = useState(0);
+          const [isDesktop, setIsDesktop] = useState(false);
+          const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+          const containerRef = useRef(null);
+
+          const designSystem = {
+            layout: {
+              maxWidth: "1056px",
+              heroGapBase: "10vh",
+              heroGapAdjusted: "14vh", 
+              labelToTitle: "8vh",    
+              titleToContent: "12vh",  
+              sectionPadding: "25vh",
+              titleSize: "clamp(2.8rem, 6vw, 4.5rem)",
+              narrativeSize: "clamp(1.8rem, 4.5vw, 3rem)",
+              subtitleSize: "clamp(1.8rem, 6vw, 5vh)", 
+              titleLeading: "1.2",
+              titleTracking: "-0.05em", 
+              bodySize: "20px",
+              bodyWeight: 300,
+              bodyTracking: "-0.027em"
+            },
+            colors: {
+              bg: "#F7EEE9",
+              text: "#3E3832", 
+              heading: "#2D2A26",
+              accent: "#D06741",      
+              darkAccent: "#AF4F2C", 
+              sub: "#737373", 
+              accentRGB: "208, 103, 65",
+              yellowRGB: "245, 195, 110",
+              pinkRGB: "245, 120, 160"
+            }
+          };
+
+          const getRawImg = (url) => url.replace("github.com", "raw.githubusercontent.com").replace("/blob/", "/");
+
+          const assets = {
+            solution: [
+              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/74197a5bc9884a55b3d38a4bc0d7a5d525c46ece/Screen%201%20-%20How%20it%20works_1st%20applicant.png"),
+              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/cb1d5143c150aec57880181dbca31078649f91cf/Screen%202-%20Transition%20-%20joint%20account%20details.png"),
+              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/74197a5bc9884a55b3d38a4bc0d7a5d525c46ece/Screen%203%20-%20All%20done.png"),
+              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/8ba4636050a912cb50c786b6208b0a5313da8532/Screen%204%20-%20How%20it%20works_2nd%20Applicant.png"),
+              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/74197a5bc9884a55b3d38a4bc0d7a5d525c46ece/Screen%205%20-%20Transition%20-%20personal%20details.png"),
+              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/8ba4636050a912cb50c786b6208b0a5313da8532/Screen%206%20-%20Outcome%20-%20Successfully%20recived%20the%20application.png")
+            ],
+            willItWork: [
+              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/cb1d5143c150aec57880181dbca31078649f91cf/Will%20it%20work%201%20-%20Choose%20who%20you%20are.png"),
+              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/e75f002c105d18d95a3f13b0fe1678be7ad065e1/Prime%20expectations.png"),
+              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/cb1d5143c150aec57880181dbca31078649f91cf/Screen%202-%20Transition%20-%20joint%20account%20details.png"),
+              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/cb1d5143c150aec57880181dbca31078649f91cf/Will%20it%20work%202%20-%20Transition%20-%20personal%20details.png") 
+            ],
+            validation: getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/cb1d5143c150aec57880181dbca31078649f91cf/Will%20it%20work%202%20-%20Transition%20-%20personal%20details.png")
+          };
+
+          const discoveryData = [
+            { before: "Functional", after: "Symbolic", desc: "Beyond bill sharing: it is a sign of commitment and trust." },
+            { before: "Independency", after: "Consultation", desc: "They value agency, yet prefer sitting together for shared efficiency." },
+            { before: "Agency", after: "Single driver", desc: "Half of interviewed couples prefers one partner filling out the entire application." },
+            { before: "Equal responsibility", after: "Natural roles", desc: "Instead of a 50/50 split, they lean into natural strengths: the savvy one leads, the other one follows." }
+          ];
+
+          useEffect(() => {
+            const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+            handleResize();
+            window.addEventListener("resize", handleResize);
+
+            const handleScroll = () => {
+              const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+              const progress = Math.min(window.scrollY / totalHeight, 1);
+              setScrollProgress(progress);
+            };
+            window.addEventListener("scroll", handleScroll);
+
+            const link = document.createElement("link");
+            link.href = "https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Hanken+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Mono&family=Nanum+Brush+Script&display=swap";
+            link.rel = "stylesheet";
+            document.head.appendChild(link);
+
+            return () => {
+              window.removeEventListener("scroll", handleScroll);
+              window.removeEventListener("resize", handleResize);
+            };
+          }, []);
+
+          const darknessT = scrollProgress > 0.85 ? Math.min((scrollProgress - 0.85) / 0.12, 1) : 0;
+          const dynamicTextColor = darknessT > 0.3 ? "#1A1A1A" : designSystem.colors.text;
+
+          const Bold = ({ children }) => (
+            <span className="font-semibold text-[#1A1A1A]" style={{ letterSpacing: designSystem.layout.bodyTracking }}>{children}</span>
+          );
+
+          const bodyStyle = {
+            fontSize: designSystem.layout.bodySize,
+            fontWeight: designSystem.layout.bodyWeight,
+            letterSpacing: designSystem.layout.bodyTracking,
+            color: designSystem.colors.text,
+            lineHeight: "1.6"
+          };
+
+          const getEbStyle = (fontSize) => ({
+            fontFamily: "'EB Garamond', serif",
+            fontStyle: "italic",
+            fontWeight: 300, 
+            letterSpacing: designSystem.layout.titleTracking,
+            lineHeight: "1", 
+            color: designSystem.colors.text,
+            fontSize: fontSize
+          });
+
+          const NotebookPaper = ({ id }) => (
+            <div className="relative flex flex-col justify-center h-full z-10 font-['Hanken_Grotesk'] overflow-hidden min-h-[550px] bg-white border border-black/10 shadow-[0_30px_60px_rgba(0,0,0,0.02)]">
+              <div className="w-full relative z-20 flex flex-col px-10 text-center">
+                <div style={{ height: "4.2rem" }} className="flex items-end w-full relative border-b border-black/[0.08]">
+                  <div className="w-full" style={{ transform: 'translateY(-0.45rem)' }}>
+                    <p className="font-['JetBrains_Mono'] tracking-[0.2em] font-medium uppercase leading-none text-[#737373] w-full" style={{ fontSize: "14px" }}>
+                      Applicant 0 {id}
+                    </p>
+                  </div>
+                </div>
+                {["Independently", "fills out their", "part,", "whenever and", "wherever they", "want."].map((text, index) => (
+                  <div key={index} style={{ height: "4.2rem" }} className={`flex items-end w-full relative border-b border-black/[0.08] ${index === 5 ? "border-b-0" : ""}`}>
+                    <div className="w-full" style={{ transform: 'translateY(-0.55rem)' }}>
+                      <p className="font-light tracking-tight leading-none w-full" style={{ fontSize: "clamp(18px, 2.5vw, 24px)", color: designSystem.colors.text }}>
+                        {text}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+
+          // Sunlight calculations
+          const heroOpacity = scrollProgress < 0.07 ? Math.pow(1 - scrollProgress / 0.07, 3.0) : 0;
+          const isRevived = scrollProgress > 0.18; 
+          const growthT = isRevived ? Math.min((scrollProgress - 0.18) / 0.65, 1) : 0;
+          const rangeCurve = Math.pow(growthT, 1.3); 
+          const orangeOpa = scrollProgress < 0.07 ? 0.75 * heroOpacity : (isRevived ? Math.min(0.5 + growthT * 0.35, 0.8) : 0);
+          const yellowOpa = scrollProgress > 0.35 ? Math.min((scrollProgress - 0.35) * 2, 0.55) : 0;
+          const pinkOpa = scrollProgress > 0.80 ? Math.min((scrollProgress - 0.80) * 6, 0.65) : 0;
+          const dynamicRange = isRevived ? (40 + rangeCurve * 110) : (scrollProgress < 0.07 ? 85 : 0);
+
+          return (
+            <div ref={containerRef} className="transition-all duration-700 min-h-screen relative font-['Hanken_Grotesk'] selection:bg-orange-100" style={{ backgroundColor: designSystem.colors.bg, color: dynamicTextColor, transition: "color 0.8s ease-in-out, background-color 1.2s ease-in-out" }}>
+              <div className="fixed inset-0 pointer-events-none opacity-[0.08] mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/paper-fibers.png')] z-50"></div>
+              
+              <style>{`
+                body { overflow-x: hidden; }
+                @keyframes sunFlow { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(1.5%, 2.5%) scale(1.02); } }
+                .animate-sun-safe { animation: ${prefersReducedMotion ? 'none' : 'sunFlow 15s infinite ease-in-out'}; }
+                .sunlight-orange { background: radial-gradient(ellipse at 0% 0%, rgba(${designSystem.colors.accentRGB}, 0.9) 0%, rgba(${designSystem.colors.accentRGB}, 0.35) 30%, rgba(${designSystem.colors.accentRGB}, 0.05) 75%, rgba(${designSystem.colors.accentRGB}, 0) 100%); }
+                .sunlight-yellow { background: radial-gradient(ellipse at 100% 0%, rgba(${designSystem.colors.yellowRGB}, 0.75) 0%, rgba(${designSystem.colors.yellowRGB}, 0.25) 45%, rgba(${designSystem.colors.yellowRGB}, 0) 100%); }
+                .sunlight-pink { background: radial-gradient(ellipse at center, rgba(${designSystem.colors.pinkRGB}, 0.8) 0%, rgba(${designSystem.colors.pinkRGB}, 0.25) 45%, rgba(${designSystem.colors.pinkRGB}, 0) 100%); }
+              `}</style>
+
+              <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+                <div style={{ width: `${dynamicRange}vw`, height: `${dynamicRange}vh`, top: '-15%', left: '-15%', opacity: orangeOpa, filter: 'blur(140px)', mixBlendMode: 'multiply' }} className="absolute sunlight-orange transition-all duration-[1000ms] ease-out" />
+                <div style={{ width: `${dynamicRange * 0.95}vw`, height: `${dynamicRange * 0.95}vh`, top: '-5%', right: '-25%', opacity: yellowOpa, filter: 'blur(150px)', mixBlendMode: 'screen' }} className="absolute sunlight-yellow transition-all duration-[1200ms] ease-out animate-sun-safe" />
+                <div style={{ opacity: pinkOpa, filter: 'blur(120px)', mixBlendMode: 'soft-light' }} className="absolute inset-0 sunlight-pink transition-opacity duration-[1500ms]" />
+              </div>
+
+              {/* 01. HERO */}
+              <section className="h-screen flex items-center justify-center px-6 md:px-12 lg:px-0 relative z-10">
+                <div className="flex flex-col w-full mx-auto items-center" style={{ maxWidth: designSystem.layout.maxWidth }}>
+                  <div className="w-full max-w-3xl flex flex-col">
+                    <div className="w-full text-left"><h1 style={getEbStyle("clamp(3.5rem, 8vw, 10vh)")}>From equal steps</h1></div>
+                    <div className="w-full text-right" style={{ marginTop: designSystem.layout.heroGapBase }}><h1 style={{ ...getEbStyle("clamp(3.5rem, 8vw, 10vh)"), color: designSystem.colors.accent }}>to balanced roles</h1></div>
+                    <div className="w-full text-center" style={{ marginTop: designSystem.layout.heroGapAdjusted }}><p className="font-['Nanum_Brush_Script'] text-[clamp(1.8rem,3.2vw,3rem)] durability-none text-[#737373]">Shared onboarding against real relationship dynamics</p></div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 02. SUMMARY SECTION */}
+              <section className="px-6 md:px-12 lg:px-0 relative z-10">
+                <div className="mx-auto border-y border-black/10 py-16 mt-4" style={{ maxWidth: designSystem.layout.maxWidth }}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 lg:gap-x-40 gap-y-12 text-left">
+                    <div className="space-y-12">
+                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>Initial Brief</span><p style={bodyStyle}>Introduce joint account applications into Santander’s mobile offering through a separate completion model.</p></div>
+                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>The Real Problem</span><p style={bodyStyle}>Equal liability does not mean equal steps. The lead-and-follow dynamics is real in relationships</p></div>
+                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>Constraints & Tensions</span><p style={bodyStyle}>Balancing research with existing journey ecosystem, technical feasibility, compliance and data protection.</p></div>
+                    </div>
+                    <div className="space-y-12">
+                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>My Approach</span><p style={bodyStyle}>I spotted research gaps, recalibrated the model and pushed for further validation to de-risk the direction.</p></div>
+                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>My Role</span><p style={bodyStyle}>End-to-end UX design, competitive and comparative analysis, research gap synthesis, validation framing, journey mapping and stakeholder alignment.</p></div>
+                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>Measurable Direction</span><p style={bodyStyle}>Monitor application uplift and flow behaviour to guide post-launch iteration.</p></div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 01 / THE INITIAL VISION */}
+              <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10">
+                <div className="mx-auto" style={{ maxWidth: designSystem.layout.maxWidth }}>
+                  <div className="flex flex-col items-start">
+                     <div className="w-full text-left mb-16"><div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>01 / THE INITIAL VISION</div></div>
+                     <div className="w-full text-left">
+                       <div className="mb-10"><h2 style={{ ...getEbStyle(designSystem.layout.titleSize), lineHeight: '1.2' }}>Extending the mobile product portfolio</h2></div>
+                       <div className="w-full text-left space-y-6">
+                          <p style={bodyStyle}>With single-account applications already live, joint accounts were a natural next step in Santander’s revamped mobile app portfolio.</p>
+                          <p style={bodyStyle}>We started with a simple idea: <Bold>equal liability = equal process.</Bold> Different from the legacy web journey where one person takes full control, separate completion seems independent and flexible.</p>
+                       </div>
+                     </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-0 relative z-10" style={{ marginTop: '12vh' }}>
+                    <div className="lg:border-r-0"><NotebookPaper id={1} /></div>
+                    <div><NotebookPaper id={2} /></div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 02 / IDENTIFYING RESEARCH GAPS */}
+              <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10">
+                <div className="mx-auto text-left" style={{ maxWidth: designSystem.layout.maxWidth }}>
+                  <div className="flex flex-col items-start">
+                    <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>02 / Identifying research gaps</div>
+                    <h3 style={{ ...getEbStyle(designSystem.layout.titleSize), marginTop: designSystem.layout.labelToTitle }} className="text-left">Not just operational, but relational</h3>
+                    <div style={{ marginTop: designSystem.layout.titleToContent }} className="max-w-4xl text-left space-y-6">
+                       <p style={bodyStyle}>Initial research report broadly validated the model after concept testing with 6 couples and a 300-person survey.</p>
+                       <p style={bodyStyle}>However, after further digging, <Bold>I identified critical gaps</Bold> that challenges our assumptions. Joint account is built upon real relationships where roles naturally emerge. <Bold>Rather than equal steps, it’s about roles</Bold>, responsibilities and handovers in an emotionally sensitive journey.</p>
+                    </div>
+                  </div>
+                  <div className="relative flex flex-col items-start lg:block gap-12 lg:gap-8 lg:min-h-[950px]" style={{ marginTop: designSystem.layout.titleToContent }}>
+                    {discoveryData.map((item, i) => {
+                      const desktopPositions = [{ left: '4%', top: '40px', rotate: '-3deg' }, { left: '48%', top: '40px', rotate: '4.5deg' }, { left: '8%', top: '480px', rotate: '2.5deg' }, { left: '54%', top: '480px', rotate: '-4deg' }];
+                      return (
+                        <div key={i} className="relative lg:absolute w-full lg:max-w-[460px] p-8 md:p-12 bg-white shadow-[0_15px_50px_rgba(0,0,0,0.04)] border border-black/[0.03] rounded-sm transition-all duration-500"
+                          style={{ left: isDesktop ? desktopPositions[i].left : "auto", top: isDesktop ? desktopPositions[i].top : "auto", transform: isDesktop ? `rotate(${desktopPositions[i].rotate})` : `translateX(${["-12px", "12px", "-8px", "10px"][i]}) rotate(${["-1.5deg", "2.2deg", "-1.2deg", "1.8deg"][i]})` }}>
+                          <div className="space-y-8">
+                            <div className="flex justify-between items-start border-b border-black/5 pb-4"><span className="font-['JetBrains_Mono'] tracking-[0.2em] font-medium uppercase text-[#737373]" style={{ fontSize: '14px' }}>Insight 0{i+1}</span><div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: designSystem.colors.accent }} /></div>
+                            <div className="space-y-2">
+                              <div className={`font-['EB_Garamond'] italic font-normal text-[#1A1A1A] durability-through decoration-[#1A1A1A] opacity-80 durability-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>{item.before}</div>
+                              <div className={`font-['EB_Garamond'] italic font-normal pt-1 text-[#D06741] durability-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>{item.after}</div>
+                            </div>
+                            <p style={bodyStyle}>{item.desc}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </section>
+
+              {/* 03 / ROADMAP */}
+              <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10 text-left">
+                <div className="mx-auto" style={{ maxWidth: designSystem.layout.maxWidth }}>
+                  <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>03 / Expanding the roadmap</div>
+                  <div style={{ marginTop: designSystem.layout.labelToTitle }}>
+                    <h3 style={getEbStyle(designSystem.layout.titleSize)} className="text-left">Advocating for the new</h3>
+                    <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center" style={{ marginTop: designSystem.layout.titleToContent }}>
+                        <div style={{ ...getEbStyle("clamp(8rem, 15vw, 28vh)"), color: designSystem.colors.accent, letterSpacing: '-0.08em' }} className="text-left">30%</div>
+                        <div style={bodyStyle} className="text-left">
+                            <p>30% of survey participants would consider a new provider for a fresh start, a feeling of separateness. <Bold>I flagged the genuine new-provider appetite</Bold>: MVP 1 stayed existing-to-existing, while MVP 2 expanded toward acquisition.</p>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 04 / RESEARCH TO DESIGN */}
+              <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10 text-left">
+                <div className="mx-auto flex flex-col items-start" style={{ maxWidth: designSystem.layout.maxWidth }}>
+                  <div className="flex flex-col items-start">
+                    <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>04 / Translating research into design</div>
+                    <h3 style={{ ...getEbStyle(designSystem.layout.titleSize), marginTop: designSystem.layout.labelToTitle }} className="text-left">Role vs rule</h3>
+                    <div style={{ marginTop: designSystem.layout.titleToContent }} className="max-w-4xl"><p style={bodyStyle}>I treated the first draft as a way to test the model, not lock the flow. The challenge was <Bold>translating role-based anticipations into the existing systems and rules </Bold> defined by mobile journey ecosystem, tech constraints like authentication, customer recognition, backend data storage, as well as compliance and data protection requirements.</p></div>
+                  </div>
+                  <div className="w-full mt-12">
+                    <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                      {[
+                        { title: "Split the application", text: <span>Keep separate completion due to <Bold>authentication constraints</Bold>, while making the role clear.</span> },
+                        { title: "Prime expectations", text: "Prepare both applicants for their roles, responsibilities and next steps." },
+                        { title: "Respect the dynamics", text: <span>Minimise effort for applicant 2 by asking applicant 1 to cover account-level questions.</span> },
+                        { title: "Overdraft handling", text: <span>Overdraft assessment requires both people's details. Heads-up added for both to mitigate <Bold>responsibility mismatch</Bold>.</span> }
+                      ].map((s, idx) => (
+                        <div key={idx} className="flex flex-col items-start">
+                          <div className="w-full bg-white border border-black/5 shadow-[0_15px_40px_rgba(0,0,0,0.02)]"><img src={assets.willItWork[idx]} alt={s.title} className="w-full h-auto block" /></div>
+                          <div className="space-y-4 px-2 w-full text-left mt-5 md:mt-8">
+                            <div className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] durability-[1.2]`} style={{ fontSize: "24px" }}>{s.title}</div>
+                            <p style={bodyStyle}>{s.text}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 05 / VALIDATION FOR DE-RISKING */}
+              <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10 text-left">
+                <div className="mx-auto flex flex-col" style={{ maxWidth: designSystem.layout.maxWidth }}>
+                  <div className="flex flex-col text-left">
+                    <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>05 / Validation for de-risking</div>
+                    <h3 style={{ ...getEbStyle(designSystem.layout.titleSize), marginTop: designSystem.layout.labelToTitle }} className="text-left">Caught off guard</h3>
+                    <div style={{ marginTop: designSystem.layout.titleToContent }} className="max-w-4xl">
+                      <p style={bodyStyle}>
+                        The first draft still carried risk as it might clash with real lead-and-follow dynamics. <Bold>With limited research resource, I pushed for a lighter second validation </Bold> round to de-risk the model rather than simply test screens.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Desktop Pairing Stretch */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 mt-[15vh] gap-x-16 lg:gap-x-24 items-stretch">
+                    
+                    <div className="order-1 md:order-1 flex flex-col">
+                      <div className="w-full md:max-w-[320px] bg-white border border-black/5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.03)] overflow-hidden h-full flex items-center">
+                        <img src={assets.validation} alt="Confusion insight" className="w-full h-full object-cover block" />
+                      </div>
+                    </div>
+
+                    <div className="order-3 md:order-2 mt-[10vh] md:mt-0 flex flex-col">
+                      <div className="w-full md:max-w-[320px] bg-white border border-black/5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.03)] p-8 md:p-10 flex flex-col justify-between h-full">
+                        <div className="space-y-1 pb-4 border-b border-black/[0.05]">
+                          <div style={getEbStyle(designSystem.layout.titleSize)} className="durability-none">87%</div>
+                          <div className="font-['JetBrains_Mono'] uppercase font-medium tracking-[0.2em] text-[#737373] mt-6" style={{ fontSize: '12px' }}>Togetherness</div>
+                          <p style={{ ...bodyStyle, fontSize: '16px' }} className="mt-2">Liked that they did it together</p>
+                        </div>
+                        <div className="space-y-1 py-4 border-b border-black/[0.05]">
+                          <div style={getEbStyle(designSystem.layout.titleSize)} className="durability-none">76%</div>
+                          <div className="font-['JetBrains_Mono'] uppercase font-medium tracking-[0.2em] text-[#737373] mt-6" style={{ fontSize: '12px' }}>Agency</div>
+                          <p style={{ ...bodyStyle, fontSize: '16px' }} className="mt-2">Disagree that their partner would do it all</p>
+                        </div>
+                        <div className="space-y-1 pt-4">
+                          <div style={getEbStyle(designSystem.layout.titleSize)} className="durability-none">57%</div>
+                          <div className="font-['JetBrains_Mono'] uppercase font-medium tracking-[0.2em] text-[#737373] mt-6" style={{ fontSize: '12px' }}>Autonomy</div>
+                          <p style={{ ...bodyStyle, fontSize: '16px' }} className="mt-2">Want to do application in own time</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="order-2 md:order-3 mt-8 md:mt-12 space-y-4 text-left w-full md:max-w-[320px]">
+                      <div className="font-['JetBrains_Mono'] tracking-[0.2em] font-medium uppercase text-[#737373]" style={{ fontSize: '14px' }}>Qualitative</div>
+                      <h4 className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] durability-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>"Why am I asked? I am just confirming."</h4>
+                      <p style={bodyStyle}>Most applicant 2 were still surprised and uneasy seeing overdraft, despite being primed earlier. <Bold>Contextual clarification</Bold> about "why them, why now" is needed.</p>
+                    </div>
+
+                    <div className="order-4 md:order-4 mt-8 md:mt-12 space-y-6 text-left w-full md:max-w-[320px]">
+                      <div className="font-['JetBrains_Mono'] tracking-[0.2em] uppercase font-medium text-[#737373]" style={{ fontSize: '14px' }}>Quantitative Statistics</div>
+                      <h4 className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] durability-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>The model could work if respecting the dynamics</h4>
+                      <p style={bodyStyle}>Despite natural roles, people still value participation and the flexibility to complete in their own time.</p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 06. FINAL DESIGN */}
+              <section id="solution" style={{ paddingBlock: "20vh" }} className="px-6 md:px-12 lg:px-0 relative z-10">
+                <div className="mx-auto flex flex-col md:flex-row items-start gap-12 md:gap-32" style={{ maxWidth: designSystem.layout.maxWidth }}>
+                  <div className="md:w-5/12 md:sticky md:top-[12vh] h-fit py-4 z-20 transition-all">
+                    <div className="space-y-4 text-left">
+                      <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#AF4F2C]" style={{ fontSize: '14px' }}>06 / Final design</div>
+                      <h4 style={{ ...getEbStyle("clamp(2.5rem, 5vw, 4rem)"), color: "#2D2A26", durability: "1.1" }}>It takes two to tango</h4>
+                    </div>
+                    <div className="pt-6 border-t border-[#3E3832]/50 text-left mt-8">
+                       <div className="space-y-4">
+                         <div className="space-y-2">
+                           <div className="font-['JetBrains_Mono'] uppercase font-medium text-[#737373] tracking-[0.2em]" style={{ fontSize: '14px' }}>The Principles</div>
+                           <ul className="space-y-6 pt-4">
+                             <li style={bodyStyle}><Bold>01.</Bold> Recognise the different roles.</li>
+                             <li style={bodyStyle}><Bold>02.</Bold> Explain responsibility before action.</li>
+                             <li style={bodyStyle}><Bold>03.</Bold> Recognise the shared moment.</li>
+                           </ul>
+                         </div>
+                       </div>
+                    </div>
+                  </div>
+                  <div className="md:w-7/12 relative pl-0 md:pl-16 border-l-0 md:border-l border-[#3E3832]/25">
+                    <div className="space-y-20 md:space-y-[35vh] pb-[20vh]">
+                      {[
+                        { title: "Natural initiation", desc: "Applicant 1 naturally leads. Sets expectations of the application method and steps." },
+                        { title: "Leading with ease", desc: "They answer shared account-level questions, such as initial deposit." }, 
+                        { title: "A sense of closure", desc: "Applicant 1 finishes with a clear timeline of what to expect." }, 
+                        { title: "Over to applicant 2", desc: "More detailed step-by-step guidance to remove the \"cluelessness\" being handed over." }, 
+                        { title: "The overdraft bridge", desc: "Applicant 1 is pre-notified. A contextual bridge screen then surface for applicant 2 to clarify the \"why\"s and ease the flow." }, 
+                        { title: "Shared excitement", desc: "Congratulations screen recognises the shared emotional highlight." }
+                      ].map((screen, idx) => (
+                        <div key={idx} className="relative group text-left">
+                          <div className="hidden md:block absolute left-0 -ml-16 -translate-x-1/2 top-[0.8rem] w-3 h-3 rounded-full bg-[#F7EEE9] border-2 z-20 border-[#AF4F2C]"></div>
+                          <div className="flex flex-col gap-0 items-start">
+                            <div className="w-full md:max-w-[320px] bg-white border border-black/5 shadow-2xl"><img src={assets.solution[idx]} alt={screen.title} className="w-full h-auto block" /></div>
+                            <div className="space-y-4 w-full md:max-w-[320px] text-left mt-5 md:mt-8">
+                               <h5 className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] durability-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>{screen.title}</h5>
+                               <p style={bodyStyle}>{screen.desc}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* 07 / THE LAUNCH */}
+              <section className="min-h-screen flex flex-col items-start md:items-center justify-center px-6 md:px-12 lg:px-0 text-left md:text-center relative z-20 overflow-hidden pb-32">
+                <div className="mx-auto space-y-16 w-full flex flex-col items-start md:items-center" style={{ maxWidth: designSystem.layout.maxWidth }}>
+                  <div className="space-y-8 w-full flex flex-col items-start md:items-center">
+                    <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741] text-left md:text-center w-full" style={{ fontSize: '14px' }}>07 / THE LAUNCH</div>
+                    <h2 style={getEbStyle("clamp(4.5rem, 12vw, 15vh)")} className="text-left md:text-center w-full">Balanced roles</h2>
+                    <div className="max-w-3xl text-left md:text-center">
+                      <p style={bodyStyle}>Balancing user demand, safety, compliance, technical feasibility and market opportunity, the journey is scheduled for release in summer 2026.</p>
+                    </div>
+                  </div>
+                  <div className="w-full max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 text-left border-t border-black/10 pt-16">
+                    <div className="space-y-3">
+                      <span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>Projected Impact</span>
+                      <p style={bodyStyle}>15% anticipated uplift in all-channel applications (+14.4k annually).</p>
+                    </div>
+                    <div className="space-y-3">
+                      <span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>Continuous Iteration by monitoring</span>
+                      <ul style={bodyStyle} className="space-y-3">
+                        <li className="flex items-start"><span className="mr-2">▪</span> Submission rate</li>
+                        <li className="flex items-start"><span className="mr-2">▪</span> Drop-offs</li>
+                        <li className="flex items-start"><span className="mr-2">▪</span> Journey behaviour</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="pt-8 w-full flex justify-start md:justify-center">
+                    <a href="index.html" className="grungy-back-btn w-full md:w-auto">BACK TO ALL CASES</a>
+                  </div>
+                </div>
+              </section>
+            </div>
+          );
+        };
+
+        const container = document.getElementById('root');
+        if (container) {
+          const root = ReactDOM.createRoot(container);
+          root.render(<App />);
+        }
+    </script>
+</body>
+</html>

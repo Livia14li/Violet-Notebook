@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case 01 | Killer Questions</title>
+
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background-color: #000 !important;
+            margin: 0;
+        }
+
+        #root {
+            opacity: 0;
+            transform: translateY(-30px); 
+            animation: slideDownBounce 0.9s cubic-bezier(0.18, 1.15, 0.54, 1) forwards;
+            animation-delay: 0.2s; 
+        }
+
+        @keyframes slideDownBounce {
+            0% { opacity: 0; transform: translateY(-30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        body { 
+            background-color: #050505; 
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            padding: 4vh 0 20vh 0;
+            background-color: #050505;
+        }
+
+        .grungy-back-btn {
+            background: transparent;
+            border: 1.5px solid rgba(248, 248, 248, 0.4);
+            color: rgba(248, 248, 248, 0.7); 
+            padding: 1rem 2.5rem;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.85rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 100px;
+            white-space: nowrap;
+            text-decoration: none;
+            filter: url(#jitter-button);
+            transition: all 0.3s ease;
+        }
+
+        .grungy-back-btn:hover {
+            border-color: #B52121;
+            color: #B52121;
+            opacity: 1;
+        }
+
+        #root:empty { min-height: 100vh; }
+    </style>
+</head>
+<body>
+
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="jitter-button">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="1" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+        </filter>
+    </svg>
+
+    <div id="root"></div>
+
+    <div class="footer-nav">
+        <a href="index.html" class="grungy-back-btn">Back to all cases</a>
+    </div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const App = () => {
+          const [scrolled, setScrolled] = useState(0);
+          const [revealOne, setRevealOne] = useState(false);
+          const [revealTwo, setRevealTwo] = useState(false);
+
+          useEffect(() => {
+            const handleScroll = () => {
+              const position = window.scrollY;
+              const height = document.documentElement.scrollHeight - window.innerHeight;
+              setScrolled(position / height);
+            };
+            window.addEventListener('scroll', handleScroll);
+            return () => window.removeEventListener('scroll', handleScroll);
+          }, []);
+
+          const rawImg = (url) => url.includes('github.com') ? url.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/') : url;
+
+          return (
+            <div className="min-h-screen bg-[#050505] text-[#F0F0F0] selection:bg-[#B52121]/30 antialiased overflow-x-hidden">
+              
+              <style>
+                {`
+                  @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;700&family=Hanken+Grotesk:wght@100;200;300;400;500;700&family=Nanum+Brush+Script&display=swap');
+                  
+                  .paper-texture {
+                    background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+                    background-blend-mode: multiply;
+                  }
+
+                  .grain-heavy {
+                    background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+                    opacity: 0.12;
+                    pointer-events: none;
+                    mix-blend-mode: screen;
+                    animation: grain-flicker 0.2s steps(2) infinite;
+                  }
+
+                  @keyframes grain-flicker {
+                    0 { transform: translate(0, 0); }
+                    100 { transform: translate(-0.2%, 0.2%); }
+                  }
+
+                  .text-light-primary { color: #F0F0F0; }
+                  .text-dark-body { color: #A2A2A4; }
+                  .text-paper-body { color: #2A2A2B; }
+                  .text-brand-red { color: #B52121; }
+                  .text-dim { color: #626264; }
+
+                  .text-outliner {
+                    font-family: 'EB Garamond', serif;
+                    font-size: clamp(4.5rem, 18vw, 25vh);
+                    line-height: 0.85;
+                    font-style: italic;
+                    font-weight: 300;
+                    letter-spacing: -0.03em;
+                  }
+
+                  .text-section-title {
+                    font-family: 'EB Garamond', serif;
+                    font-size: clamp(2.5rem, 10vw, 11vh);
+                    line-height: 1.2;
+                    font-style: italic;
+                    font-weight: 400;
+                    letter-spacing: -0.02em;
+                  }
+
+                  .text-subtitle {
+                    font-family: 'EB Garamond', serif;
+                    font-size: clamp(1.8rem, 6vw, 5vh);
+                    line-height: 1.1;
+                    font-style: italic;
+                  }
+
+                  .text-body-standard {
+                    font-family: 'Hanken Grotesk', sans-serif;
+                    font-size: 20px;
+                    line-height: 1.6;
+                    font-style: normal;
+                    font-weight: 400;
+                    letter-spacing: -0.01em;
+                  }
+
+                  .text-label {
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 12px;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.3em;
+                    line-height: 1.0;
+                  }
+
+                  @media (min-width: 768px) {
+                    .text-label {
+                      font-size: 14px;
+                    }
+                  }
+
+                  .ink-bleed-heavy {
+                    text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.04), -0.5px -0.5px 1px rgba(0,0,0,0.5);
+                  }
+                  
+                  ::-webkit-scrollbar { width: 3px; }
+                  ::-webkit-scrollbar-track { background: #050505; }
+                  ::-webkit-scrollbar-thumb { background: #222; }
+                  
+                  * { cursor: crosshair; }
+                `}
+              </style>
+
+              <div className="fixed inset-0 grain-heavy z-50 pointer-events-none" />
+              <div className="fixed inset-0 pointer-events-none z-[3] bg-[radial-gradient(circle_at_center,transparent_20%,rgba(0,0,0,0.95)_100%)] opacity-80" />
+
+              <div 
+                className="fixed top-0 left-0 h-[1px] bg-[#B52121] z-[90] transition-all duration-150 ease-out shadow-[0_0_15px_rgba(181,33,33,0.5)] opacity-80"
+                style={{ width: `${scrolled * 100}%` }}
+              />
+
+              <main className="max-w-6xl mx-auto px-4 sm:px-12 pb-0 relative z-10 flex flex-col space-y-[25vh] md:space-y-[50vh]">
+                
+                {/* SCREEN 1: HERO TITLE & SUMMARY */}
+                <header className="min-h-screen flex flex-col items-center justify-center text-center relative overflow-hidden pt-[5vh]">
+                  <div className="w-full transform -translate-y-[2vh] z-10 px-2 select-none mb-12 md:mb-16">
+                    <h1 
+                      className="font-light italic tracking-tighter ink-bleed-heavy text-light-primary
+                                 text-[10vh] sm:text-[16vh] md:text-[22vh] lg:text-[24vh]
+                                 leading-[0.9]" 
+                      style={{ fontFamily: 'EB Garamond, serif' }}
+                    >
+                      <span className="block text-dim">A strange</span>
+                      <span className="block text-dim">case</span>
+                      <span className="block">of the killer</span>
+                      <span className="block">questions</span>
+                    </h1>
+                  </div>
+
+                  <div className="max-w-5xl w-full border-y border-white/10 py-16 px-4 md:px-8 mt-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 lg:gap-x-40 gap-y-12 text-left">
+                      
+                      <div className="space-y-12">
+                        <div className="space-y-3">
+                          <span className="text-label text-brand-red">Initial brief</span>
+                          <p className="text-body-standard text-dark-body">
+                            Fix early drop-off around eligibility by changing the question format.
+                          </p>
+                        </div>
+                        
+                        <div className="space-y-3">
+                          <span className="text-label text-brand-red">The real problem</span>
+                          <p className="text-body-standard text-dark-body">
+                            The issue is not isolated. Users are asked to commit before they understand the product and the process.
+                          </p>
+                        </div>
+
+                        <div className="space-y-3">
+                          <span className="text-label text-brand-red">Constraints & tensions</span>
+                          <p className="text-body-standard text-dark-body">
+                            Tight release timeline and stakeholder feedback cycle.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-12">
+                        <div className="space-y-3">
+                          <span className="text-label text-brand-red">My approach</span>
+                          <p className="text-body-standard text-dark-body">
+                            Adopting lean research, I used analytics and targeted testing to turn a screen fix into early-funnel strategy.
+                          </p>
+                        </div>
+
+                        <div className="space-y-3">
+                          <span className="text-label text-brand-red">My role</span>
+                          <p className="text-body-standard text-dark-body">
+                            Adobe Analytics analysis, early-funnel redesign, hi-fi mobile flows, and targeted UserZoom testing.
+                          </p>
+                        </div>
+
+                        <div className="space-y-3">
+                          <span className="text-label text-brand-red">Measurable direction</span>
+                          <p className="text-body-standard text-dark-body">
+                            Measure submission uplift and qualified users captured, not just drop-off reduction.
+                          </p>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </header>
+
+                {/* SCREEN 2: PO QUOTE SECTION */}
+                <section className="min-h-screen flex items-center justify-center text-center px-4">
+                  <h2 className="text-section-title text-light-primary ink-bleed-heavy italic">
+                    “Fix it.” my PO said. <br/>
+                    “There's a big drop off. It's urgent!”
+                  </h2>
+                </section>
+
+                {/* SCREEN 3: ACT 1 INVESTIGATION FILE */}
+                <section className="min-h-screen flex items-center justify-center relative py-12 md:py-0">
+                  <div className="max-w-6xl w-full bg-[#E2DFD8] paper-texture text-paper-body shadow-[0_40px_100px_rgba(0,0,0,0.7)] relative border border-black/5 flex flex-col md:grid md:grid-cols-2 items-stretch overflow-hidden rounded-sm">
+                    
+                    <div className="p-8 sm:p-12 md:p-16 lg:p-24 flex flex-col justify-start order-2 md:order-1 text-left h-full">
+                      <div className="flex flex-col space-y-12">
+                        <div className="flex items-center gap-4 opacity-40">
+                          <span className="text-label text-[#737373]">Investigation_File_001.A</span>
+                          <div className="h-px flex-grow bg-black/10"></div>
+                        </div>
+
+                        <div>
+                          <h2 className="text-5xl sm:text-6xl md:text-8xl italic tracking-tighter leading-none mb-8" style={{ fontFamily: 'EB Garamond, serif' }}>Killer questions</h2>
+                          <p className="text-subtitle text-brand-red" style={{ fontFamily: "'Nanum Brush Script', cursive" }}>Intended for friction</p>
+                        </div>
+
+                        <div className="space-y-10">
+                          <div className="max-w-md">
+                            <h4 className="text-label text-[#737373] mb-3 border-b border-black/5 pb-1 inline-block">01. Subject summary</h4>
+                            <p className="text-body-standard">
+                              Screens out customers not qualified for applying in the app.
+                            </p>
+                          </div>
+                          <div className="max-w-md">
+                            <h4 className="text-label text-[#737373] mb-3 border-b border-black/5 pb-1 inline-block">02. Intention</h4>
+                            <p className="text-body-standard">
+                              Intentional friction designed to stop or redirect—ensuring <span className="font-bold">zero time</span> wasted on dead-ends.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="mt-16 pt-6 border-t border-black/5 hidden sm:flex justify-between items-center opacity-30">
+                        <span className="text-label">Status: Restricted</span>
+                      </div>
+                    </div>
+
+                    <div className="p-8 sm:p-12 md:p-16 lg:p-24 h-full bg-black/[0.01] md:border-l border-black/5 flex items-start justify-center overflow-hidden order-1 md:order-2">
+                        <div className="w-full flex justify-center md:mt-[74px]">
+                          <img 
+                            src="https://raw.githubusercontent.com/Livia14li/Portfolio-2026/a23c430341aecfc8071206f9a0cf1811b2af696e/Intro%20Eligibility.png" 
+                            alt="Intro" 
+                            className="w-full h-auto md:max-w-[300px] object-contain block" 
+                          />
+                        </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="text-center px-2">
+                  <div className="space-y-6">
+                    <h2 className="text-section-title text-light-primary ink-bleed-heavy">
+                      Before diving in headfirst, <br/>
+                      I insist we handle the case with <span className="text-brand-red tracking-[-0.05em] italic">caution.</span>
+                    </h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-20 pt-18 md:pt-24 text-left">
+                    <div className="space-y-4 max-w-[380px]">
+                       <h3 className="text-subtitle text-light-primary">Chance</h3>
+                       <p className="text-body-standard text-dark-body">Eligibility was flagged as the biggest early drop-off point.</p>
+                    </div>
+                    <div className="space-y-4 max-w-[380px]">
+                       <h3 className="text-subtitle text-light-primary">Or trap?</h3>
+                       <p className="text-body-standard text-dark-body">However, friction is partly intended. Reducing it might merely delay the drop off. I need evidence that we are truly losing eligible traffic.</p>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="flex flex-col space-y-12">
+                  <div className="max-w-5xl mx-auto text-center px-4">
+                    <h2 className="text-section-title text-light-primary ink-bleed-heavy italic">
+                      Is the drop off natural? <br className="hidden md:block" /> I dug into Adobe analytics.
+                    </h2>
+                    <h2 className="text-section-title text-light-primary ink-bleed-heavy pb-12 mt-6 md:mt-12 italic">Spellbound.</h2>
+                  </div>
+
+                  <div className="space-y-24 md:space-y-48 px-0 pt-12 md:pt-32">
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center text-left">
+                       <div className="md:col-span-6 order-2 md:order-1">
+                          <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/d8e997e61584603c07d1341d986483c7440163c8/Crime%20scene%20elsewhere%20copy.jpg')} className="w-full shadow-2xl" alt="Intel 1" />
+                       </div>
+                       <div className="md:col-span-6 space-y-4 md:space-y-6 order-1 md:order-2 px-4 md:px-0">
+                          <span className="text-label text-brand-red">Intel #1</span>
+                          <h3 className="text-subtitle text-light-primary tracking-tight">Crime scene is elsewhere.</h3>
+                          <p className="text-body-standard text-dark-body">
+                            Users didn't drop at eligibility. They returned to the expectation first, looking for preparation before committing.
+                          </p>
+                       </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center text-left md:flex-row-reverse">
+                       <div className="md:col-span-6 md:order-2 space-y-4 md:space-y-6 px-4 md:px-0">
+                          <span className="text-label text-brand-red">Intel #2</span>
+                          <h3 className="text-subtitle text-light-primary tracking-tight">The strange looping.</h3>
+                          <p className="text-body-standard text-dark-body">
+                            Users were not moving linearly through eligibility. They were looping through hard stops, trying to decode hidden rules.
+                          </p>
+                       </div>
+                       <div className="md:col-span-6 md:order-1">
+                          <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/d8e997e61584603c07d1341d986483c7440163c8/Looping.jpg')} className="w-full shadow-2xl" alt="Intel 2" />
+                       </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center text-left">
+                       <div className="md:col-span-6 order-2 md:order-1">
+                          <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/d8e997e61584603c07d1341d986483c7440163c8/Fake%20death.jpg')} className="w-full shadow-2xl" alt="Intel 3" />
+                       </div>
+                       <div className="md:col-span-6 space-y-4 md:space-y-6 order-1 md:order-2 px-4 md:px-0">
+                          <span className="text-label text-brand-red">Intel #3</span>
+                          <h3 className="text-subtitle text-light-primary tracking-tight">Fake death.</h3>
+                          <p className="text-body-standard text-dark-body">
+                            Some users were hard-stopped, changed their answer, then continued and submitted at normal rates. We are missing out eligible users.
+                          </p>
+                       </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="text-center flex flex-col justify-center px-4">
+                  <div className="space-y-6 mb-16 md:mb-20">
+                    <h2 className="text-section-title text-light-primary ink-bleed-heavy italic">
+                      The revelation
+                    </h2>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 max-w-5xl mx-auto w-full">
+                     <div className="space-y-4 text-left">
+                        <span className="text-label text-dim block">THE PROBLEM</span>
+                        <div onClick={() => setRevealOne(!revealOne)} className="group relative h-64 sm:h-80 cursor-pointer overflow-hidden border border-white/10 hover:border-white/20 bg-[#050505] shadow-[0_20px_50px_rgba(0,0,0,0.5)] active:scale-[0.98] transition-all duration-500">
+                           <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] ${revealOne ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'}`}>
+                              <p className="text-subtitle text-light-primary">Too many questions.</p>
+                              <div className="mt-12 text-label text-brand-red group-hover:scale-110 transition-transform duration-300">CLICK TO REVEAL</div>
+                           </div>
+                           <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 text-paper-body bg-[#E2DFD8] paper-texture transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] ${revealOne ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
+                              <p className="text-xl sm:text-2xl md:text-3xl font-bold italic leading-tight px-4 text-center" style={{ fontFamily: 'EB Garamond, serif' }}>Premature commitment, hidden rules, and product value shown too late.</p>
+                           </div>
+                        </div>
+                     </div>
+
+                     <div className="space-y-4 text-left">
+                        <span className="text-label text-dim block">THE TASK</span>
+                        <div onClick={() => setRevealTwo(!revealTwo)} className="group relative h-64 sm:h-80 cursor-pointer overflow-hidden border border-white/10 hover:border-white/20 bg-[#050505] shadow-[0_20px_50px_rgba(0,0,0,0.5)] active:scale-[0.98] transition-all duration-500">
+                           <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] ${revealTwo ? '-translate-y-full opacity-0' : 'translate-y-0 opacity-100'}`}>
+                              <p className="text-subtitle text-light-primary">Reformat display.</p>
+                              <div className="mt-12 text-label text-brand-red group-hover:scale-110 transition-transform duration-300">CLICK TO REVEAL</div>
+                           </div>
+                           <div className={`absolute inset-0 flex flex-col items-center justify-center p-8 text-paper-body bg-[#E2DFD8] paper-texture transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] ${revealTwo ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}`}>
+                              <p className="text-xl sm:text-2xl md:text-3xl font-bold italic leading-tight px-4 text-center" style={{ fontFamily: 'EB Garamond, serif' }}>Reframe the early funnel around readiness and qualified-user capture.</p>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                </section>
+
+                <section className="space-y-12 md:space-y-24 px-4">
+                  <div className="max-w-4xl mx-auto text-center">
+                    <h2 className="text-section-title text-light-primary ink-bleed-heavy italic">
+                      Closing the clue that <br className="hidden md:block" />
+                      could <span className="text-brand-red">cost</span> customers
+                    </h2>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 lg:gap-x-40 gap-y-12 items-start text-left">
+                    <div className="space-y-8">
+                       <p className="text-body-standard text-dark-body">
+                         With a tight schedule, we initially focused on reordering the funnel without changing compliance-dependent copy.
+                       </p>
+                       <p className="text-body-standard text-dark-body">
+                         However, I couldn't ignore the <span className="text-brand-red font-bold">70% false negatives</span> of the <span className="text-light-primary font-medium">living permanently in the UK</span> question. We are losing eligible customers every single day!
+                       </p>
+                       <p className="text-body-standard text-dark-body">
+                         I ran a targeted UserZoom test to prove the wording was misleading and convinced the PO to secure an immediate wording change.
+                       </p>
+                    </div>
+
+                    <div className="bg-white/[0.03] border border-white/10 p-8 sm:p-10 space-y-10 rounded-sm relative overflow-hidden">
+                       <div className="space-y-6">
+                         <h4 className="text-label text-brand-red tracking-[0.4em]">Targeted UserZoom test</h4>
+                         <div className="space-y-8">
+                            <div className="space-y-1">
+                               <p className="text-label text-dim">Participants</p>
+                               <p className="text-body-standard text-dark-body">50 participants living in the UK but not from here.</p>
+                            </div>
+                            <div className="space-y-1">
+                               <p className="text-label text-dim">Context</p>
+                               <p className="text-body-standard text-dark-body">Most likely to be affected by residency criteria.</p>
+                            </div>
+                            <div className="space-y-1">
+                               <p className="text-label text-dim">Method</p>
+                               <p className="text-body-standard text-dark-body">Wording interpretation and scenario testing.</p>
+                            </div>
+                         </div>
+                       </div>
+
+                       <div className="pt-8 border-t border-white/10 flex items-center justify-between">
+                          <div className="space-y-6">
+                             <p className="text-label text-brand-red">Key result</p>
+                             <p className="text-body-standard text-dark-body font-bold">80% participants won't apply under current wording.</p>
+                          </div>
+                       </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="space-y-12 md:space-y-32 px-4">
+                  <div className="text-center space-y-8">
+                    <h2 className="text-section-title text-light-primary ink-bleed-heavy italic">
+                      Redefining strategy
+                    </h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-24 px-0 sm:px-12 text-left pt-12">
+                    {[
+                      { t: "From screen fix to funnel strategy", d: "Reframing the problem from a single screen to a journey building readiness before commitment." },
+                      { t: "From screening test to guided routing", d: "Moving from pass/fail questions to upfront criteria with routes for unserved needs." },
+                      { t: "From measuring drop-offs to submissions", d: "I pushed the team to track submissions to measure the real improvement, not just reduction in early drop offs." }
+                    ].map((p, i) => (
+                      <div key={i} className="space-y-4 md:space-y-10">
+                        <div className="text-label text-brand-red">— 0{i+1} —</div>
+                        <h3 className="text-subtitle text-light-primary leading-tight">{p.t}</h3>
+                        <p className="text-body-standard text-dark-body">{p.d}</p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="flex flex-col space-y-16 md:space-y-48 px-4 sm:px-0">
+                  <div className="max-w-4xl space-y-12 md:space-y-8 mx-auto text-center">
+                    <h2 className="text-section-title text-light-primary ink-bleed-heavy italic">
+                      Final design
+                    </h2>
+                  </div>
+
+                  <div className="space-y-24 md:space-y-48 w-full text-left">
+                    <div className="space-y-8 md:space-y-12">
+                       <div className="border-b border-white/10 pb-4">
+                          <h3 className="text-subtitle text-light-primary">From one road to many</h3>
+                       </div>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start">
+                          <div className="space-y-6">
+                             <span className="text-label text-brand-red">Then</span>
+                             <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full md:max-w-[300px]">
+                                <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/d8e997e61584603c07d1341d986483c7440163c8/Key%20change%201%20-%20before%20-%20step%201.png')} className="w-full border border-white/5" alt="B1" />
+                                <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/d8e997e61584603c07d1341d986483c7440163c8/Key%20change%201%20-%20before%20-%20step%202.png')} className="w-full border border-white/5" alt="B2" />
+                                <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/d8e997e61584603c07d1341d986483c7440163c8/Key%20change%201%20-%20before%20-%20step%203.png')} className="w-full border border-white/5" alt="B3" />
+                             </div>
+                             <p className="text-body-standard text-dark-body w-full md:max-w-[300px]">Assumes strong intent from start. Only mobile-available products are prominent. Eligibility filtered early.</p>
+                          </div>
+                          <div className="space-y-6">
+                             <span className="text-label text-brand-red">Now</span>
+                             <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full md:max-w-[300px]">
+                                <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/9a3cda92ab56b23ef0a2dcceae823143e001fa15/Key%20change%201%20-%20after%20-%20step%201.png')} className="w-full border border-white/10 shadow-2xl" alt="A1" />
+                                <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/9a3cda92ab56b23ef0a2dcceae823143e001fa15/Key%20change%201%20-%20after%20-%20step%202.png')} className="w-full border border-white/10 shadow-2xl" alt="A2" />
+                                <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/9a3cda92ab56b23ef0a2dcceae823143e001fa15/Key%20change%201%20-%20after%20-%20step%203.png')} className="w-full border border-white/10 shadow-2xl" alt="A3" />
+                             </div>
+                             <p className="text-body-standard text-dark-body w-full md:max-w-[300px]">Welcomes customers exploring different products. Eligibility becomes guidance.</p>
+                          </div>
+                       </div>
+                    </div>
+
+                    <div className="space-y-8 md:space-y-12">
+                       <div className="border-b border-white/10 pb-4">
+                          <h3 className="text-subtitle text-light-primary">Separate eligibility logic</h3>
+                       </div>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start">
+                          <div className="space-y-6">
+                            <span className="text-label text-brand-red">Then</span>
+                            <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/9a3cda92ab56b23ef0a2dcceae823143e001fa15/Key%20change%202%20-%20before.png')} className="w-full h-auto border border-white/5 md:max-w-[300px]" alt="B" />
+                            <p className="text-body-standard text-dark-body w-full md:max-w-[300px]">Product and channel eligibility mixed together. Other product type info scattered elsewhere.</p>
+                          </div>
+                          <div className="space-y-6">
+                            <span className="text-label text-brand-red">Now</span>
+                            <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/9a3cda92ab56b23ef0a2dcceae823143e001fa15/Key%20change%202%20-%20after.png')} className="w-full h-auto border border-white/10 shadow-2xl md:max-w-[300px]" alt="A" />
+                            <p className="text-body-standard text-dark-body w-full md:max-w-[300px]">Product eligibility sits clearly within product pages. Channel eligibility handled separately, through dedicated entry points.</p>
+                          </div>
+                       </div>
+                    </div>
+
+                    <div className="space-y-8 md:space-y-12">
+                       <div className="border-b border-white/10 pb-4">
+                          <h3 className="text-subtitle text-light-primary">Clarify expectations</h3>
+                       </div>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start">
+                          <div className="space-y-6">
+                            <span className="text-label text-brand-red">Then</span>
+                            <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/9a3cda92ab56b23ef0a2dcceae823143e001fa15/Key%20change%203%20-%20before.png')} className="w-full h-auto border border-white/5 md:max-w-[300px]" alt="B" />
+                            <p className="text-body-standard text-dark-body w-full md:max-w-[300px]">Information is sparse, poorly structured, and additional details sit randomly.</p>
+                          </div>
+                          <div className="space-y-6">
+                            <span className="text-label text-brand-red">Now</span>
+                            <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/9a3cda92ab56b23ef0a2dcceae823143e001fa15/Key%20change%203%20-%20after.png')} className="w-full h-auto border border-white/10 shadow-2xl md:max-w-[300px]" alt="A" />
+                            <p className="text-body-standard text-dark-body w-full md:max-w-[300px]">Key info are surfaced upfront with the “Apply with ease” header to reduce anxiety at the moment of decision.</p>
+                          </div>
+                       </div>
+                    </div>
+
+                    <div className="space-y-8 md:space-y-12">
+                       <div className="border-b border-white/10 pb-4">
+                          <h3 className="text-subtitle text-light-primary">Signals of commitment</h3>
+                       </div>
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24 items-start">
+                          <div className="space-y-6">
+                            <span className="text-label text-brand-red">Then</span>
+                            <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/9a3cda92ab56b23ef0a2dcceae823143e001fa15/Key%20change%204%20-%20before.png')} className="w-full h-auto border border-white/5 md:max-w-[300px]" alt="B" />
+                            <p className="text-body-standard text-dark-body w-full md:max-w-[300px]">CTAs are direct and decisive. “Apply” appears early, before users feel ready.</p>
+                          </div>
+                          <div className="space-y-6">
+                            <span className="text-label text-brand-red">Now</span>
+                            <img src={rawImg('https://github.com/Livia14li/Portfolio-2026/blob/91d8be45989dcc585e10684bd9d63486a8e79b6d/Key%20change%204%20-%20after.png')} className="w-full h-auto border border-white/10 shadow-2xl md:max-w-[300px]" alt="A" />
+                            <p className="text-body-standard text-dark-body w-full md:max-w-[300px]">Early journey reads “Get ready to apply”. “Start application” appears only before real commitment.</p>
+                          </div>
+                       </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section className="flex flex-col space-y-12 md:space-y-24 pb-24 px-0 md:px-0">
+                  <div className="text-center">
+                    <h2 className="text-section-title text-light-primary ink-bleed-heavy italic">
+                      Case closed
+                    </h2>
+                  </div>
+                  
+                  <div className="bg-[#E2DFD8] paper-texture text-paper-body p-6 sm:p-12 md:p-20 shadow-[0_40px_100px_rgba(0,0,0,0.5)] relative overflow-hidden text-left">
+                     <div className="space-y-12 md:space-y-16 relative z-10">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-2 border-black/80 pb-6 gap-4">
+                           <h2 className="text-2xl sm:text-3xl md:text-5xl font-light italic uppercase tracking-tighter" style={{ fontFamily: 'EB Garamond, serif' }}>Under observation</h2>
+                           <div className="text-label text-brand-red border-2 border-black px-3 md:px-4 py-1">CASE_VERIFIED</div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+                           <div className="md:col-span-4 space-y-10">
+                              <div className="space-y-1">
+                                 <p className="text-label text-[#737373]">Dossier no.</p>
+                                 <p className="text-body-standard font-bold tracking-tight border-l border-black/10 pl-3 leading-tight text-[18px]">Eligibility reframing // <br/>Current account</p>
+                              </div>
+                              <div className="space-y-1">
+                                 <p className="text-label text-[#737373]">Designer</p>
+                                 <p className="text-body-standard font-bold tracking-widest uppercase">LIVIA LI</p>
+                              </div>
+                              <div className="space-y-1">
+                                 <p className="text-label text-[#737373]">Duration</p>
+                                 <p className="text-body-standard font-bold">2 WEEKS</p>
+                              </div>
+                           </div>
+
+                           <div className="md:col-span-8 space-y-16">
+                              <div className="space-y-4">
+                                 <p className="text-label text-[#737373]">Design & strategy</p>
+                                 <p className="text-body-standard leading-relaxed">
+                                    Shifted from reducing eligibility screening friction, I redesigned early funnel application flow to capture qualified applicants through clearer readiness and guidance.
+                                 </p>
+                              </div>
+
+                              <div className="space-y-4">
+                                 <p className="text-label text-[#737373]">Launch & measurement</p>
+                                 <p className="text-body-standard leading-relaxed">
+                                    Scheduled for launch with projected +2% submission uplift. Success to be tracked through submission rate and flow behaviour.
+                                 </p>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                </section>
+              </main>
+            </div>
+          );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
