@@ -111,7 +111,7 @@
               getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/8ba4636050a912cb50c786b6208b0a5313da8532/Screen%206%20-%20Outcome%20-%20Successfully%20recived%20the%20application.png")
             ],
             willItWork: [
-              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/cb1d5143c150aec57880181dbca31078649f91cf/Will%20it%20work%201%20-%20Choose%20who%20you%20are.png"),
+              getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/1249165460bb950ed1001807aa2352f3c467efa0/Split%20the%20application.png"), // Updated image
               getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/e75f002c105d18d95a3f13b0fe1678be7ad065e1/Prime%20expectations.png"),
               getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/cb1d5143c150aec57880181dbca31078649f91cf/Screen%202-%20Transition%20-%20joint%20account%20details.png"),
               getRawImg("https://github.com/Livia14li/Portfolio-2026/blob/cb1d5143c150aec57880181dbca31078649f91cf/Will%20it%20work%202%20-%20Transition%20-%20personal%20details.png") 
@@ -174,12 +174,18 @@
             fontSize: fontSize
           });
 
+          const Label = ({ children, className = "" }) => (
+            <span className={`font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741] text-[12px] md:text-[14px] ${className}`}>
+              {children}
+            </span>
+          );
+
           const NotebookPaper = ({ id }) => (
             <div className="relative flex flex-col justify-center h-full z-10 font-['Hanken_Grotesk'] overflow-hidden min-h-[550px] bg-white border border-black/10 shadow-[0_30px_60px_rgba(0,0,0,0.02)]">
               <div className="w-full relative z-20 flex flex-col px-10 text-center">
                 <div style={{ height: "4.2rem" }} className="flex items-end w-full relative border-b border-black/[0.08]">
                   <div className="w-full" style={{ transform: 'translateY(-0.45rem)' }}>
-                    <p className="font-['JetBrains_Mono'] tracking-[0.2em] font-medium uppercase leading-none text-[#737373] w-full" style={{ fontSize: "14px" }}>
+                    <p className="font-['JetBrains_Mono'] tracking-[0.2em] font-medium uppercase leading-none text-[#737373] w-full text-[12px] md:text-[14px]">
                       Applicant 0 {id}
                     </p>
                   </div>
@@ -226,30 +232,33 @@
                 <div style={{ opacity: pinkOpa, filter: 'blur(120px)', mixBlendMode: 'soft-light' }} className="absolute inset-0 sunlight-pink transition-opacity duration-[1500ms]" />
               </div>
 
-              {/* 01. HERO */}
+              {/* HERO */}
               <section className="h-screen flex items-center justify-center px-6 md:px-12 lg:px-0 relative z-10">
                 <div className="flex flex-col w-full mx-auto items-center" style={{ maxWidth: designSystem.layout.maxWidth }}>
-                  <div className="w-full max-w-3xl flex flex-col">
+                  <div className="w-full max-w-3xl flex flex-col mx-auto">
                     <div className="w-full text-left"><h1 style={getEbStyle("clamp(3.5rem, 8vw, 10vh)")}>From equal steps</h1></div>
                     <div className="w-full text-right" style={{ marginTop: designSystem.layout.heroGapBase }}><h1 style={{ ...getEbStyle("clamp(3.5rem, 8vw, 10vh)"), color: designSystem.colors.accent }}>to balanced roles</h1></div>
-                    <div className="w-full text-center" style={{ marginTop: designSystem.layout.heroGapAdjusted }}><p className="font-['Nanum_Brush_Script'] text-[clamp(1.8rem,3.2vw,3rem)] durability-none text-[#737373]">Shared onboarding against real relationship dynamics</p></div>
+                  </div>
+                  {/* Hero subtitle aligned to global maxWidth container */}
+                  <div className="w-full text-center" style={{ marginTop: designSystem.layout.heroGapAdjusted }}>
+                    <p className="font-['Nanum_Brush_Script'] text-[clamp(1.8rem,3.2vw,3rem)] leading-none text-[#737373]">Shared onboarding against real relationship dynamics</p>
                   </div>
                 </div>
               </section>
 
-              {/* 02. SUMMARY SECTION */}
+              {/* SUMMARY SECTION */}
               <section className="px-6 md:px-12 lg:px-0 relative z-10">
                 <div className="mx-auto border-y border-black/10 py-16 mt-4" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-24 lg:gap-x-40 gap-y-12 text-left">
                     <div className="space-y-12">
-                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>Initial Brief</span><p style={bodyStyle}>Introduce joint account applications into Santander’s mobile offering through a separate completion model.</p></div>
-                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>The Real Problem</span><p style={bodyStyle}>Equal liability does not mean equal steps. The lead-and-follow dynamics are real in relationships</p></div>
-                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>Constraints & Tensions</span><p style={bodyStyle}>Balancing research with existing journey ecosystem, technical feasibility, compliance and data protection.</p></div>
+                      <div className="space-y-3"><Label>Initial Brief</Label><p style={bodyStyle}>Introduce joint account applications into Santander’s mobile offering through a separate completion model.</p></div>
+                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741] text-[12px] md:text-[14px]">The Real Problem</span><p style={bodyStyle}>Equal liability does not mean equal steps. The lead-and-follow dynamics in real relationships require different levels of context and responsibility.</p></div>
+                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741] text-[12px] md:text-[14px]">Constraints & Tensions</span><p style={bodyStyle}>Balancing existing mobile journey ecosystem, technical feasibility, compliance, and data protection.</p></div>
                     </div>
                     <div className="space-y-12">
-                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>My Approach</span><p style={bodyStyle}>I spotted research gaps, recalibrated the model and pushed for further validation to de-risk the direction.</p></div>
-                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>My Role</span><p style={bodyStyle}>End-to-end UX design, competitive and comparative analysis, research gap synthesis, validation framing, journey mapping and stakeholder alignment.</p></div>
-                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>Measurable Direction</span><p style={bodyStyle}>Monitor application uplift and flow behaviour to guide post-launch iteration.</p></div>
+                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741] text-[12px] md:text-[14px]">My Approach</span><p style={bodyStyle}>I spotted research gaps, recalibrated the model and pushed for further validation to de-risk the direction.</p></div>
+                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741] text-[12px] md:text-[14px]">My Role</span><p style={bodyStyle}>End-to-end UX design, competitive and comparative analysis, research gap synthesis, validation framing, journey mapping and stakeholder alignment.</p></div>
+                      <div className="space-y-3"><span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741] text-[12px] md:text-[14px]">Measurable Direction</span><p style={bodyStyle}>Monitor application uplift and flow behaviour to guide post-launch iteration.</p></div>
                     </div>
                   </div>
                 </div>
@@ -259,12 +268,12 @@
               <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10">
                 <div className="mx-auto" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="flex flex-col items-start">
-                     <div className="w-full text-left mb-16"><div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>01 / THE INITIAL VISION</div></div>
+                     <div className="w-full text-left mb-16"><Label className="tracking-[0.8em]">01 / THE INITIAL VISION</Label></div>
                      <div className="w-full text-left">
                        <div className="mb-10"><h2 style={{ ...getEbStyle(designSystem.layout.titleSize), lineHeight: '1.2' }}>Extending the mobile product portfolio</h2></div>
                        <div className="w-full text-left space-y-6">
                           <p style={bodyStyle}>With single-account applications already live, joint accounts were a natural next step in Santander’s revamped mobile app portfolio.</p>
-                          <p style={bodyStyle}>We started with a simple idea: <Bold>equal liability = equal process.</Bold> Different from the legacy web journey where one person takes full control, separate completion seems independent and flexible.</p>
+                          <p style={bodyStyle}>We started with a simple idea: <Bold>equal liability = equal process.</Bold> Unlike the legacy web journey where one person takes full control, separate completion seems independent and flexible.</p>
                        </div>
                      </div>
                   </div>
@@ -279,10 +288,10 @@
               <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10">
                 <div className="mx-auto text-left" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="flex flex-col items-start">
-                    <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>02 / Identifying research gaps</div>
+                    <Label className="tracking-[0.8em]">02 / Identifying research gaps</Label>
                     <h3 style={{ ...getEbStyle(designSystem.layout.titleSize), marginTop: designSystem.layout.labelToTitle }} className="text-left">Not just operational, but relational</h3>
-                    <div style={{ marginTop: designSystem.layout.titleToContent }} className="max-w-4xl text-left space-y-6">
-                       <p style={bodyStyle}>Initial research report broadly validated the model after concept testing with 6 couples and a 300-person survey.</p>
+                    <div style={{ marginTop: designSystem.layout.titleToContent }} className="w-full text-left space-y-6">
+                       <p style={bodyStyle}><Bold>Initial research report broadly validated</Bold> the model after concept testing with 6 couples and a 300-person survey.</p>
                        <p style={bodyStyle}>However, after further digging, <Bold>I identified critical gaps</Bold> that challenged our assumptions. Joint account is built upon real relationships where roles naturally emerge. <Bold>Rather than equal steps, it’s about roles</Bold>, responsibilities and handovers in an emotionally sensitive journey.</p>
                     </div>
                   </div>
@@ -293,10 +302,11 @@
                         <div key={i} className="relative lg:absolute w-full lg:max-w-[460px] p-8 md:p-12 bg-white shadow-[0_15px_50px_rgba(0,0,0,0.04)] border border-black/[0.03] rounded-sm transition-all duration-500"
                           style={{ left: isDesktop ? desktopPositions[i].left : "auto", top: isDesktop ? desktopPositions[i].top : "auto", transform: isDesktop ? `rotate(${desktopPositions[i].rotate})` : `translateX(${["-12px", "12px", "-8px", "10px"][i]}) rotate(${["-1.5deg", "2.2deg", "-1.2deg", "1.8deg"][i]})` }}>
                           <div className="space-y-8">
-                            <div className="flex justify-between items-start border-b border-black/5 pb-4"><span className="font-['JetBrains_Mono'] tracking-[0.2em] font-medium uppercase text-[#737373]" style={{ fontSize: '14px' }}>Insight 0{i+1}</span><div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: designSystem.colors.accent }} /></div>
+                            <div className="flex justify-between items-start border-b border-black/5 pb-4"><span className="font-['JetBrains_Mono'] tracking-[0.2em] font-medium uppercase text-[#737373] text-[12px] md:text-[14px]">Insight 0{i+1}</span><div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: designSystem.colors.accent }} /></div>
                             <div className="space-y-2">
-                              <div className={`font-['EB_Garamond'] italic font-normal text-[#1A1A1A] durability-through decoration-[#1A1A1A] opacity-80 durability-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>{item.before}</div>
-                              <div className={`font-['EB_Garamond'] italic font-normal pt-1 text-[#D06741] durability-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>{item.after}</div>
+                              {/* Insight Strikethrough refinement */}
+                              <div className="font-['EB_Garamond'] italic font-normal text-[#1A1A1A] line-through decoration-[#1A1A1A] opacity-80 leading-[1.2]" style={{ fontSize: designSystem.layout.subtitleSize }}>{item.before}</div>
+                              <div className="font-['EB_Garamond'] italic font-normal pt-1 text-[#D06741] leading-[1.2]" style={{ fontSize: designSystem.layout.subtitleSize }}>{item.after}</div>
                             </div>
                             <p style={bodyStyle}>{item.desc}</p>
                           </div>
@@ -310,7 +320,7 @@
               {/* 03 / ROADMAP */}
               <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10 text-left">
                 <div className="mx-auto" style={{ maxWidth: designSystem.layout.maxWidth }}>
-                  <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>03 / Expanding the roadmap</div>
+                  <Label className="tracking-[0.8em]">03 / Expanding the roadmap</Label>
                   <div style={{ marginTop: designSystem.layout.labelToTitle }}>
                     <h3 style={getEbStyle(designSystem.layout.titleSize)} className="text-left">Advocating for the new</h3>
                     <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center" style={{ marginTop: designSystem.layout.titleToContent }}>
@@ -327,9 +337,11 @@
               <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10 text-left">
                 <div className="mx-auto flex flex-col items-start" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="flex flex-col items-start">
-                    <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>04 / Translating research into design</div>
+                    <Label className="tracking-[0.8em]">04 / Translating research into design</Label>
                     <h3 style={{ ...getEbStyle(designSystem.layout.titleSize), marginTop: designSystem.layout.labelToTitle }} className="text-left">Role vs rule</h3>
-                    <div style={{ marginTop: designSystem.layout.titleToContent }} className="max-w-4xl"><p style={bodyStyle}>I treated the first draft as a way to test the model, not lock the flow. The challenge was <Bold>translating role-based anticipations into the existing systems and rules </Bold> defined by mobile journey ecosystem, tech constraints like authentication, customer recognition, backend data storage, as well as compliance and data protection requirements.</p></div>
+                    <div style={{ marginTop: designSystem.layout.titleToContent }} className="w-full">
+                      <p style={bodyStyle}>The challenge was <Bold>translating role-based anticipations into the existing systems and rules</Bold>, including mobile journey ecosystem, tech constraints like authentication, customer recognition, backend data storage, as well as compliance and data protection rules.</p>
+                    </div>
                   </div>
                   <div className="w-full mt-12">
                     <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -337,12 +349,12 @@
                         { title: "Split the application", text: <span>Keep separate completion due to <Bold>authentication constraints</Bold>, while making the role clear.</span> },
                         { title: "Prime expectations", text: "Prepare both applicants for their roles, responsibilities and next steps." },
                         { title: "Respect the dynamics", text: <span>Minimise effort for applicant 2 by asking applicant 1 to cover account-level questions.</span> },
-                        { title: "Overdraft handling", text: <span>Overdraft assessment requires both people's details. Heads-up added for both to mitigate <Bold>responsibility mismatch</Bold>.</span> }
+                        { title: "Overdraft Handling", text: <span>Overdraft assessment requires both people's details. Heads-up added for both to <Bold>mitigate responsibility mismatch</Bold>.</span> }
                       ].map((s, idx) => (
                         <div key={idx} className="flex flex-col items-start">
                           <div className="w-full bg-white border border-black/5 shadow-[0_15px_40px_rgba(0,0,0,0.02)]"><img src={assets.willItWork[idx]} alt={s.title} className="w-full h-auto block" /></div>
                           <div className="space-y-4 px-2 w-full text-left mt-5 md:mt-8">
-                            <div className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] durability-[1.2]`} style={{ fontSize: "24px" }}>{s.title}</div>
+                            <div className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] leading-[1.2]`} style={{ fontSize: "24px" }}>{s.title}</div>
                             <p style={bodyStyle}>{s.text}</p>
                           </div>
                         </div>
@@ -356,53 +368,53 @@
               <section style={{ paddingBlock: designSystem.layout.sectionPadding }} className="px-6 md:px-12 lg:px-0 relative z-10 text-left">
                 <div className="mx-auto flex flex-col" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="flex flex-col text-left">
-                    <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741]" style={{ fontSize: '14px' }}>05 / Validation for de-risking</div>
+                    <Label className="tracking-[0.8em]">05 / Validation for de-risking</Label>
                     <h3 style={{ ...getEbStyle(designSystem.layout.titleSize), marginTop: designSystem.layout.labelToTitle }} className="text-left">Caught off guard</h3>
-                    <div style={{ marginTop: designSystem.layout.titleToContent }} className="max-w-4xl">
+                    <div style={{ marginTop: designSystem.layout.titleToContent }} className="w-full">
                       <p style={bodyStyle}>
                         The first draft still carried risk as it might clash with real lead-and-follow dynamics. <Bold>With limited research resource, I pushed for a lighter second validation </Bold> round to de-risk the model rather than simply test screens.
                       </p>
                     </div>
                   </div>
 
-                  {/* Desktop Pairing Stretch */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 mt-[15vh] gap-x-16 lg:gap-x-24 items-stretch">
+                  {/* Stretch logic refined to stacking for mobile */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 mt-[15vh] gap-x-16 lg:gap-x-24 md:items-stretch">
                     
-                    <div className="order-1 md:order-1 flex flex-col">
-                      <div className="w-full md:max-w-[320px] bg-white border border-black/5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.03)] overflow-hidden h-full flex items-center">
-                        <img src={assets.validation} alt="Confusion insight" className="w-full h-full object-cover block" />
+                    <div className="order-1 md:order-1 flex flex-col h-auto md:h-full">
+                      <div className="w-full md:max-w-[320px] bg-white border border-black/5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.03)] overflow-hidden h-auto md:h-full flex items-center">
+                        <img src={assets.validation} alt="Confusion insight" className="w-full h-auto md:h-full md:object-cover block" />
                       </div>
                     </div>
 
-                    <div className="order-3 md:order-2 mt-[10vh] md:mt-0 flex flex-col">
-                      <div className="w-full md:max-w-[320px] bg-white border border-black/5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.03)] p-8 md:p-10 flex flex-col justify-between h-full">
+                    <div className="order-3 md:order-2 mt-20 md:mt-0 flex flex-col h-auto md:h-full">
+                      <div className="w-full md:max-w-[320px] bg-white border border-black/5 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.03)] p-8 md:p-10 flex flex-col justify-between h-auto md:h-full min-h-[350px]">
                         <div className="space-y-1 pb-4 border-b border-black/[0.05]">
-                          <div style={getEbStyle(designSystem.layout.titleSize)} className="durability-none">87%</div>
-                          <div className="font-['JetBrains_Mono'] uppercase font-medium tracking-[0.2em] text-[#737373] mt-6" style={{ fontSize: '12px' }}>Togetherness</div>
+                          <div style={getEbStyle(designSystem.layout.titleSize)} className="leading-none">87%</div>
+                          <div className="mt-6"><Label className="text-[#737373] tracking-[0.2em]">Togetherness</Label></div>
                           <p style={{ ...bodyStyle, fontSize: '16px' }} className="mt-2">Liked that they did it together</p>
                         </div>
                         <div className="space-y-1 py-4 border-b border-black/[0.05]">
-                          <div style={getEbStyle(designSystem.layout.titleSize)} className="durability-none">76%</div>
-                          <div className="font-['JetBrains_Mono'] uppercase font-medium tracking-[0.2em] text-[#737373] mt-6" style={{ fontSize: '12px' }}>Agency</div>
+                          <div style={getEbStyle(designSystem.layout.titleSize)} className="leading-none">76%</div>
+                          <div className="mt-6"><Label className="text-[#737373] tracking-[0.2em]">Agency</Label></div>
                           <p style={{ ...bodyStyle, fontSize: '16px' }} className="mt-2">Disagree that their partner would do it all</p>
                         </div>
                         <div className="space-y-1 pt-4">
-                          <div style={getEbStyle(designSystem.layout.titleSize)} className="durability-none">57%</div>
-                          <div className="font-['JetBrains_Mono'] uppercase font-medium tracking-[0.2em] text-[#737373] mt-6" style={{ fontSize: '12px' }}>Autonomy</div>
+                          <div style={getEbStyle(designSystem.layout.titleSize)} className="leading-none">57%</div>
+                          <div className="mt-6"><Label className="text-[#737373] tracking-[0.2em]">Autonomy</Label></div>
                           <p style={{ ...bodyStyle, fontSize: '16px' }} className="mt-2">Want to do application in own time</p>
                         </div>
                       </div>
                     </div>
 
                     <div className="order-2 md:order-3 mt-8 md:mt-12 space-y-4 text-left w-full md:max-w-[320px]">
-                      <div className="font-['JetBrains_Mono'] tracking-[0.2em] font-medium uppercase text-[#737373]" style={{ fontSize: '14px' }}>Qualitative</div>
-                      <h4 className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] durability-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>"Why am I asked? I am just confirming."</h4>
-                      <p style={bodyStyle}>Most applicant 2 were still surprised and uneasy seeing overdraft, despite being primed earlier. <Bold>Contextual clarification</Bold> about "why them, why now" is needed.</p>
+                      <Label className="text-[#737373] tracking-[0.2em]">Qualitative</Label>
+                      <h4 className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] leading-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>"Why am I asked? I am just confirming."</h4>
+                      <p style={bodyStyle}>Most applicant 2 were <Bold>still surprised and uneasy</Bold> seeing overdraft, despite being primed earlier. <Bold>Contextual clarification</Bold> about "why them, why now" is needed.</p>
                     </div>
 
                     <div className="order-4 md:order-4 mt-8 md:mt-12 space-y-6 text-left w-full md:max-w-[320px]">
-                      <div className="font-['JetBrains_Mono'] tracking-[0.2em] uppercase font-medium text-[#737373]" style={{ fontSize: '14px' }}>Quantitative Statistics</div>
-                      <h4 className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] durability-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>The model could work if respecting the dynamics</h4>
+                      <Label className="text-[#737373] tracking-[0.2em]">Quantitative Statistics</Label>
+                      <h4 className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] leading-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>The model could work if respecting the dynamics</h4>
                       <p style={bodyStyle}>Despite natural roles, people still value participation and the flexibility to complete in their own time.</p>
                     </div>
                   </div>
@@ -414,13 +426,13 @@
                 <div className="mx-auto flex flex-col md:flex-row items-start gap-12 md:gap-32" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="md:w-5/12 md:sticky md:top-[12vh] h-fit py-4 z-20 transition-all">
                     <div className="space-y-4 text-left">
-                      <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#AF4F2C]" style={{ fontSize: '14px' }}>06 / Final design</div>
-                      <h4 style={{ ...getEbStyle("clamp(2.5rem, 5vw, 4rem)"), color: "#2D2A26", durability: "1.1" }}>It takes two to tango</h4>
+                      <Label className="tracking-[0.8em] text-[#AF4F2C]">06 / Final design</Label>
+                      <h4 style={{ ...getEbStyle("clamp(2.5rem, 5vw, 4rem)"), color: "#2D2A26", lineHeight: "1.1" }}>It takes two to tango</h4>
                     </div>
                     <div className="pt-6 border-t border-[#3E3832]/50 text-left mt-8">
                        <div className="space-y-4">
                          <div className="space-y-2">
-                           <div className="font-['JetBrains_Mono'] uppercase font-medium text-[#737373] tracking-[0.2em]" style={{ fontSize: '14px' }}>The Principles</div>
+                           <Label className="text-[#737373] tracking-[0.2em]">The Principles</Label>
                            <ul className="space-y-6 pt-4">
                              <li style={bodyStyle}><Bold>01.</Bold> Recognise the different roles.</li>
                              <li style={bodyStyle}><Bold>02.</Bold> Explain responsibility before action.</li>
@@ -436,7 +448,7 @@
                         { title: "Natural initiation", desc: "Applicant 1 naturally leads. Sets expectations of the application method and steps." },
                         { title: "Leading with ease", desc: "They answer shared account-level questions, such as initial deposit." }, 
                         { title: "A sense of closure", desc: "Applicant 1 finishes with a clear timeline of what to expect." }, 
-                        { title: "Over to applicant 2", desc: "More detailed step-by-step guidance to remove the \"cluelessness\" being handed over." }, 
+                        { title: "Over to applicant 2", desc: "More detailed step-by-step guidance to remove the cluelessness being handed over." }, 
                         { title: "The overdraft bridge", desc: "Applicant 1 is pre-notified. A contextual bridge screen then surface for applicant 2 to clarify the \"why\"s and ease the flow." }, 
                         { title: "Shared excitement", desc: "Congratulations screen recognises the shared emotional highlight." }
                       ].map((screen, idx) => (
@@ -445,7 +457,7 @@
                           <div className="flex flex-col gap-0 items-start">
                             <div className="w-full md:max-w-[320px] bg-white border border-black/5 shadow-2xl"><img src={assets.solution[idx]} alt={screen.title} className="w-full h-auto block" /></div>
                             <div className="space-y-4 w-full md:max-w-[320px] text-left mt-5 md:mt-8">
-                               <h5 className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] durability-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>{screen.title}</h5>
+                               <h5 className={`font-['EB_Garamond'] italic font-normal text-[#3E3832] leading-[1.2]`} style={{ fontSize: designSystem.layout.subtitleSize }}>{screen.title}</h5>
                                <p style={bodyStyle}>{screen.desc}</p>
                             </div>
                           </div>
@@ -460,7 +472,7 @@
               <section className="min-h-screen flex flex-col items-start md:items-center justify-center px-6 md:px-12 lg:px-0 text-left md:text-center relative z-20 overflow-hidden pb-32">
                 <div className="mx-auto space-y-16 w-full flex flex-col items-start md:items-center" style={{ maxWidth: designSystem.layout.maxWidth }}>
                   <div className="space-y-8 w-full flex flex-col items-start md:items-center">
-                    <div className="font-['JetBrains_Mono'] tracking-[0.8em] uppercase font-bold text-[#D06741] text-left md:text-center w-full" style={{ fontSize: '14px' }}>07 / THE LAUNCH</div>
+                    <Label className="tracking-[0.8em] text-[#D06741]">07 / THE LAUNCH</Label>
                     <h2 style={getEbStyle("clamp(4.5rem, 12vw, 15vh)")} className="text-left md:text-center w-full">Balanced roles</h2>
                     <div className="max-w-3xl text-left md:text-center">
                       <p style={bodyStyle}>Balancing user demand, safety, compliance, technical feasibility and market opportunity, the journey is scheduled for release in summer 2026.</p>
@@ -468,11 +480,11 @@
                   </div>
                   <div className="w-full max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 text-left border-t border-black/10 pt-16">
                     <div className="space-y-3">
-                      <span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>Projected Impact</span>
-                      <p style={bodyStyle}>15% anticipated uplift in all-channel applications (+14.4k annually).</p>
+                      <Label>Projected Impact</Label>
+                      <p style={bodyStyle}><Bold>15% anticipated uplift</Bold> in all-channel applications (<Bold>+14.4k annually</Bold>).</p>
                     </div>
                     <div className="space-y-3">
-                      <span className="font-['JetBrains_Mono'] uppercase font-bold tracking-[0.3em] text-[#D06741]" style={{ fontSize: '12px' }}>Continuous Iteration by monitoring</span>
+                      <Label>Continuous Iteration by monitoring</Label>
                       <ul style={bodyStyle} className="space-y-3">
                         <li className="flex items-start"><span className="mr-2">▪</span> Submission rate</li>
                         <li className="flex items-start"><span className="mr-2">▪</span> Drop-offs</li>
